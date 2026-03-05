@@ -44,6 +44,37 @@
     
 </div>
 
+<div class="form">
+    <fieldset>
+        <legend>Update Existing Event</legend>
+        <form id="updateForm">
+
+            <label for="title">Event Name<span>*</span></label>
+            <input type="text" id="updatedTitle" placeholder="Enter the name of the event" required="">
+
+            <label for="description">Event description<span>*</span></label>
+            <input type="text" id="updatedDescription" placeholder="Enter the description of the event" required="">
+
+            <label for="eventDate">Date<span>*</span></label>
+            <input type="text" id="updatedEventDate" placeholder="Enter the date of the event (YYYY-MM-DD)" required="">
+
+            <label for="eventTime">Event Time<span>*</span></label>
+            <input type="text" id="updatedEventTime" placeholder="Enter the time of the event" required="">
+
+            <label for="venueID">Venue ID<span>*</span></label>
+            <input type="number" id="updatedVenueID" placeholder="Enter the venue ID for the event" required="">
+
+            <!-- hidden field to store the eventID being edited -->
+            <input type="hidden" id="updatedEventID">
+
+
+            <button type="submit">Update Event</button>
+        </form>
+    </fieldset>
+
+</div>
+
+
     <div class="calendar">
 
     <div id="month-year">February 2026</div>

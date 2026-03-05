@@ -15,6 +15,14 @@ const els = {
   eventDate: document.getElementById('eventDate'),
   eventTime: document.getElementById('eventTime'),
   venueID: document.getElementById('venueID'),
+  // update form elements
+  updateForm: document.getElementById('updateForm'),
+  updatedEventID: document.getElementById('updatedEventID'),
+  updatedTitle: document.getElementById('updatedTitle'),
+  updatedDescription: document.getElementById('updatedDescription'),
+  updatedEventDate: document.getElementById('updatedEventDate'),
+  updatedEventTime: document.getElementById('updatedEventTime'),
+  updatedVenueID: document.getElementById('updatedVenueID'),
 };
 
 
@@ -38,7 +46,38 @@ function renderItem(item) {
   const eventTime = ` Event Time: ${item.eventTime},`;
   const venueID = ` Venue ID: ${item.venueID}`;
   li.textContent = `${title}${description}${eventDate}${eventTime}${venueID}`;
+  // store event id on the list item for quick access
+  li.dataset.eventId = item.eventID;
   return li;
+}
+
+// Populate update form with an event object
+function populateUpdateForm(event) {
+  els.updatedEventID.value = event.eventID;
+  els.updatedTitle.value = event.title || '';
+  els.updatedDescription.value = event.description || '';
+  els.updatedEventDate.value = event.eventDate || '';
+  els.updatedEventTime.value = event.eventTime || '';
+  els.updatedVenueID.value = event.venueID || '';
+}
+
+// Client PUT helper
+async function updateEvent(eventID, data) {
+  const res = await fetch(`${API_URL}/${eventID}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+
+  if (res.status === 200) return await res.json();
+
+  if (res.status === 404) throw new Error('Event not found');
+  if (res.status === 422) {
+    const err = await res.json().catch(() => ({}));
+    const details = err?.error?.details?.join(', ') || err?.error?.message || 'Invalid input';
+    throw new Error('Validation error: ' + details);
+  }
+  throw new Error('Unexpected status: ' + res.status);
 }
 
 async function loadItems() {
@@ -142,7 +181,10 @@ function showEventsForDay(isoDate, events) {
   }
 
   for (const event of events) {
-    els.list.appendChild(renderItem(event));
+  const li = renderItem(event);
+  // clicking a list item will populate the update form for editing
+  li.addEventListener('click', () => populateUpdateForm(event));
+  els.list.appendChild(li);
   }
 }
 
@@ -223,3 +265,44 @@ daysList.addEventListener('click', (e) => {
 document.addEventListener('DOMContentLoaded', loadItems);
 els.refresh?.addEventListener('click', loadItems);
 els.form?.addEventListener('submit', handleAdd);
+// wire the update form submit — if no ID is provided, try to find by name
+els.updateForm?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  let id = Number(els.updatedEventID.value);
+  const name = els.updatedTitle.value.trim();
+
+  if (!id) {
+    if (!name) {
+      showMessage('No event selected to update and no name provided', true);
+      return;
+    }
+    // find events with an exact title match
+    const matches = eventsCache.filter(ev => String(ev.title).trim() === name);
+    if (matches.length === 0) {
+      showMessage(`No event found with name "${name}"`, true);
+      return;
+    }
+    if (matches.length > 1) {
+      showMessage(`Multiple events found with name "${name}" — updating the first match.`);
+    }
+    id = matches[0].eventID;
+  }
+
+  const body = {
+    title: els.updatedTitle.value.trim(),
+    description: els.updatedDescription.value.trim(),
+    eventDate: els.updatedEventDate.value.trim(),
+    eventTime: els.updatedEventTime.value.trim(),
+    venueID: els.updatedVenueID.value.trim(),
+  };
+
+  try {
+    await updateEvent(id, body);
+    showMessage('Event updated.');
+    els.updateForm.reset();
+    await loadItems();
+  } catch (err) {
+    showMessage(err.message, true);
+  }
+});
