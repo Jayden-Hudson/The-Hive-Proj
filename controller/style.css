@@ -1,0 +1,149 @@
+label, input, select, textArea {
+    display: block;
+}
+span {
+    color: red;
+}
+input {
+    width: 98.5%;
+    height: 30px;
+}
+
+textArea {
+    width: 96.5%;
+    resize: none;
+    height: 100px;
+    padding: 10px;
+}
+
+select {
+    width: 100%;
+    height: 35px;
+    margin-bottom: 35px;
+}
+
+#startDate, #endDate {
+    height: 35px;
+}
+
+label {
+    margin-bottom: 5px;
+    font-size: 18px;
+    margin-top: 30px;
+}
+
+.invalidLabel {
+    color: red;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+}
+
+.hidden {
+    display: none;
+}
+
+.form {
+    width: 500px;
+}
+
+.list {
+    width: 300px;
+}
+
+h1 {
+    text-align: center;
+}
+
+fieldset {
+    margin-top: 40px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 15px;
+}
+
+legend {
+    font-size: 22px;
+}
+
+#submitButton {
+    width: 90px;
+    font-size: 18px;
+    height: 35px;
+    margin-top: 20px;
+}
+
+#otherLabel {
+    color: red;
+}
+
+.requiredField {
+    color: red;
+}
+
+.calendar {
+      width: 40%;
+      height: 100vh;
+      padding-left: 50px;
+    }
+
+    .weekdays,
+    #days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+    }
+
+
+    .weekdays {
+      margin-bottom: 30px;
+    }
+
+    #days div.selected {
+      background: #491ceb;
+      color: white;
+    }
+
+    div {
+        height: 200px;
+        width: 200px;
+    }
+    
+        /* calendar day and event styles */
+        .calendarDay {
+            min-height: 90px;
+            padding: 6px;
+            border: 1px solid rgba(0,0,0,0.06);
+            border-radius: 6px;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .dayNumber {
+            font-weight: 600;
+        }
+
+        .dayEventsContainer {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            overflow: hidden;
+        }
+
+        .eventSmall {
+            background: rgba(63,81,181,0.08);
+            color: #222;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+    
