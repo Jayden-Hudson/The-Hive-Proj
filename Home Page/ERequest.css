@@ -1,0 +1,134 @@
+:root{
+    --primary:#FFC533;
+    --accent:#C76B12;
+    --base:#1F1B16;
+    --surface:#F4E6C8;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--surface);
+    color: var(--base);
+    justify-content: center;
+    align-items: center;
+    
+}
+
+header {
+    background-color: var(--base);
+    padding: 20px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0 0 15px 0;
+    color: var(--primary);
+}
+
+.navbar{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.navbar li {
+    display: inline-block;
+    margin: 0 10px;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: var(--surface);
+    font-weight: bold;
+    padding: 8px 12px;
+    border-radius: 6px;
+}
+
+.navbar a:hover {
+    background-color: var(--accent);
+    color: white;
+}
+
+label, input, select, textArea {
+    display: block;
+}
+span {
+    color: red;
+}
+input {
+    width: 98.5%;
+    height: 30px;
+}
+
+textArea {
+    width: 96.5%;
+    resize: none;
+    height: 100px;
+    padding: 10px;
+}
+
+select {
+    width: 100%;
+    height: 35px;
+    margin-bottom: 35px;
+}
+
+#startDate, #endDate {
+    height: 35px;
+}
+
+label {
+    margin-bottom: 5px;
+    font-size: 18px;
+    margin-top: 30px;
+}
+
+.invalidLabel {
+    color: red;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+
+.hidden {
+    display: none;
+}
+
+div {
+    width: 700px;
+}
+
+h1 {
+    text-align: center;
+}
+
+fieldset {
+    margin-top: 40px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 15px;
+}
+
+legend {
+    font-size: 22px;
+}
+
+#submitButton {
+    width: 90px;
+    font-size: 18px;
+    height: 35px;
+    margin-top: 20px;
+}
+
+#otherLabel {
+    color: red;
+}
+
+.requiredField {
+    color: red;
+}
