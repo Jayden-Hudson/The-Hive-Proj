@@ -12,9 +12,9 @@ const els = {
   msg: document.getElementById('msg'),
   title: document.getElementById('title'),
   description: document.getElementById('description'),
-  eventDate: document.getElementById('eventDate'),
-  eventTime: document.getElementById('eventTime'),
-  venueID: document.getElementById('venueID'),
+  eventdate: document.getElementById('eventdate'),
+  eventtime: document.getElementById('eventtime'),
+  venueid: document.getElementById('venueid'),
   updateForm: document.getElementById('updateForm'),
   updatedEventID: document.getElementById('updatedEventID'),
   currentTitle: document.getElementById('currentTitle'),
@@ -28,8 +28,6 @@ const els = {
   deletedEventID: document.getElementById('deletedEventID')
 };
 
-
- 
 let eventsCache = [];
 
 function pad(n) { return n < 10 ? '0' + n : String(n); }
@@ -45,11 +43,11 @@ document.addEventListener('DOMContentLoaded', () => {
   loadItems();
 });
 
-  function validateEvent(obj) {
-    const errors = [];
-    const title = (obj.title || '').trim();
-    if (title && !/^.{1,}$/.test(title)) {
-      errors.push('title must be a string with at least 1 character');
+function validateEvent(obj) {
+  const errors = [];
+  const title = (obj.title || '').trim();
+  if (title && !/^.{1,}$/.test(title)) {
+    errors.push('title must be a string with at least 1 character');
   }
 
   const description = (obj.description || '').trim();
@@ -57,19 +55,19 @@ document.addEventListener('DOMContentLoaded', () => {
     errors.push('description must be a string with at least 1 character');
   }
 
-  const date = (obj.eventDate || '').trim();
+  const date = (obj.eventdate || '').trim();
   if (date && !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
-    errors.push('eventDate must be YYYY-MM-DD');
+    errors.push('eventdate must be YYYY-MM-DD');
   }
 
-  const time = (obj.eventTime || '').trim();
-  if (time && !/^\d{1,2} (AM|PM)$/.test(time)) {
-    errors.push('eventTime must be HH (AM|PM)');
+  const time = (obj.eventtime || '').trim();
+  if (time && !/^\d{1,2}[:]{1}\d{2}$/.test(time)) {
+    errors.push('eventtime must be HH:MM');
   }
 
-  const venueID = (obj.venueID || '').trim();
-  if (venueID && isNaN(Number(venueID))) {
-    errors.push('venueID must be numeric');
+  const venueid = (obj.venueid || '');
+  if (venueid && isNaN(Number(venueid))) {
+    errors.push('venueid must be numeric');
   }
 
   return { valid: errors.length === 0, errors };
@@ -80,7 +78,6 @@ function showMessage(text, isError = false) {
     const found = document.getElementById('msg');
     if (found) els.msg = found;
     else {
-      // create minimal visible fallback
       const message = document.createElement('div');
       message.id = 'msg';
       message.className = 'msg';
@@ -97,24 +94,31 @@ function renderItem(item) {
   const li = document.createElement('li');
   const title = `${item.title} --`;
   const description = ` Description: ${item.description},`;
-  const eventDate = ` Event Date: ${item.eventDate},`;
-  const eventTime = ` Event Time: ${item.eventTime},`;
-  const venueID = ` Venue ID: ${item.venueID}`;
-  li.textContent = `${title}${description}${eventDate}${eventTime}${venueID}`;
+  const eventdate = ` Event Date: ${item.eventdate},`;
+  const eventtime = ` Event Time: ${item.eventtime},`;
+  const venueid = ` Venue ID: ${item.venueid}`;
+  li.textContent = `${title}${description}${eventdate}${eventtime}${venueid}`;
+
   return li;
 }
 
-function populateUpdateForm(event) {
-  els.updatedEventID.value = event.eventID;
-  els.currentTitle.value = event.currentTitle || '';
-  els.updatedTitle.value = event.updatedTitle || '';
-  els.updatedDescription.value = event.updatedDescription || '';
-  els.updatedEventDate.value = event.updatedEventDate || '';
-  els.updatedEventTime.value = event.updatedEventTime || '';
-  els.updatedVenueID.value = event.updatedVenueID || '';
+function populateUpdateForm(eventData) {
+  els.updatedEventID.value = eventData.eventid;
+  els.currentTitle.value = eventData.title || '';
+  els.updatedTitle.value = eventData.title || '';
+  els.updatedDescription.value = eventData.description || '';
+  els.updatedEventDate.value = eventData.eventdate || '';
+  els.updatedEventTime.value = eventData.eventtime || '';
+  els.updatedVenueID.value = eventData.venueid || '';
 }
 
-async function updateEvent(eventID, data) {
+async function updateEvent(eventid, data) {
+
+  if (!eventid) {
+    showMessage('No event ID specified', true);
+    return;
+  }
+
   // client-side validation before sending to server
   const validation = validateEvent(data);
   if (!validation.valid) {
@@ -122,26 +126,28 @@ async function updateEvent(eventID, data) {
     return;
   }
 
-  const res = await fetch(`${API_URL}/${eventID}`, {
+  console.log("EVENT ID BEING SENT:", eventid);
+
+  const res = await fetch(`${API_URL}/${eventid}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   });
 
   if (res.status === 200) {
-    showMessage('Item added.');
+    showMessage('Item updated successfully');
     els.form.reset();
     await loadItems();
     return;
   }
 
   if (res.status === 422) {
-  let errJson = {};
-  try { errJson = await res.json(); } catch (_) {}
-  const details =
-    errJson?.error?.details?.join(', ') ||
-    errJson?.error?.message ||
-    'Invalid input';
+    let errJson = {};
+    try { errJson = await res.json(); } catch (_) { }
+    const details =
+      errJson?.error?.details?.join(', ') ||
+      errJson?.error?.message ||
+      'Invalid input';
     showMessage('Validation error: ' + details, true);
     return;
   }
@@ -149,8 +155,8 @@ async function updateEvent(eventID, data) {
   showMessage(`Unexpected status: ${res.status}`, true);
 }
 
-async function deleteEvent(eventID) {
-  const res = await fetch(`${API_URL}/${eventID}`, {
+async function deleteEvent(eventid) {
+  const res = await fetch(`${API_URL}/${eventid}`, {
     method: 'DELETE'
   });
 
@@ -163,11 +169,11 @@ async function deleteEvent(eventID) {
 
   if (res.status === 422) {
     let errJson = {};
-    try { errJson = await res.json(); } catch (_) {}
+    try { errJson = await res.json(); } catch (_) { }
     const details =
-        errJson?.error?.details?.join(', ') ||
-        errJson?.error?.message ||
-        'Invalid input';
+      errJson?.error?.details?.join(', ') ||
+      errJson?.error?.message ||
+      'Invalid input';
     showMessage('Validation error: ' + details, true);
     return;
   }
@@ -209,9 +215,9 @@ async function handleAdd(e) {
   const body = {
     title: els.title.value.trim(),
     description: els.description.value.trim(),
-    eventDate: els.eventDate.value.trim(),
-    eventTime: els.eventTime.value.trim(),
-    venueID: els.venueID.value.trim(),
+    eventdate: els.eventdate.value.trim(),
+    eventtime: els.eventtime.value.trim(),
+    venueid: Number(els.venueid.value.trim())
   };
 
   // run client-side validation
@@ -228,7 +234,7 @@ async function handleAdd(e) {
       body: JSON.stringify(body),
     });
 
-    if (res.status === 201) {
+    if (res.status === 200 || res.status === 201) {
       showMessage('Item added.');
       els.form.reset();
       await loadItems();
@@ -318,7 +324,8 @@ function renderCalendar() {
     cell.appendChild(dayNumber);
 
     const iso = `${year}-${pad(month + 1)}-${pad(day)}`;
-    const dayEvents = eventsCache.filter(event => event.eventDate === iso);
+    const dayEvents = eventsCache.filter(event => event.eventdate.split('T')[0] === iso);
+
     if (dayEvents.length > 0) {
       const container = document.createElement('div');
       container.className = 'dayEventsContainer';
@@ -379,15 +386,15 @@ els.updateForm?.addEventListener('submit', async (e) => {
     if (matches.length > 1) {
       showMessage(`Multiple events found with name "${title}" — updating the first match.`);
     }
-    id = matches[0].eventID;
+    id = matches[0].eventid;
   }
 
   const body = {
     title: els.updatedTitle.value.trim(),
     description: els.updatedDescription.value.trim(),
-    eventDate: els.updatedEventDate.value.trim(),
-    eventTime: els.updatedEventTime.value.trim(),
-    venueID: els.updatedVenueID.value.trim(),
+    eventdate: els.updatedEventDate.value.trim(),
+    eventtime: els.updatedEventTime.value.trim(),
+    venueid: Number(els.updatedVenueID.value.trim())
   };
 
   try {
@@ -419,7 +426,7 @@ els.deleteForm?.addEventListener('submit', async (e) => {
     if (matches.length > 1) {
       showMessage(`Multiple events found with name "${title}" — deleting the first match.`);
     }
-    id = matches[0].eventID;
+    id = matches[0].eventid;
   }
 
   const body = {
@@ -429,7 +436,7 @@ els.deleteForm?.addEventListener('submit', async (e) => {
   try {
     await deleteEvent(id, body);
     showMessage('Event deleted.');
-    els.updateForm.reset();
+    els.deleteForm.reset();
     await loadItems();
   } catch (err) {
     showMessage(err.message, true);
