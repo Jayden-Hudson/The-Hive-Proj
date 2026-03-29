@@ -1,36 +1,61 @@
-/** @type {import('better-sqlite3').Database} */
-const db = require('../db');
+// itemsDao.js
+const pool = require('../db');
 
-function all() {
-  return db.prepare('SELECT * FROM events ORDER BY eventID').all();
+// Get all events
+async function all() {
+  const result = await pool.query(`SELECT * FROM event`);
+  return result.rows;
 }
 
-function find(eventID) {
-  return db.prepare('SELECT * FROM events WHERE eventID = ?').get(eventID);
+// Create a new event
+async function create({ title, description, eventdate, eventtime, venueid }) {
+  console.log('DAO create called with:', { title, description, eventdate, eventtime, venueid });
+
+  const result = await pool.query(
+    `INSERT INTO event (title, description, eventdate, eventtime, venueid)
+     VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+    [title, description, eventdate, eventtime, venueid]
+  );
+
+  console.log('DAO insert result:', result.rows[0]);
+  return result.rows[0];
 }
 
-function create({ title, description, eventDate, eventTime, venueID }) {
-  const stmt = db.prepare(`
-    INSERT INTO events (title, description, eventDate, eventTime, venueID)
-    VALUES (?, ?, ?, ?, ?)
-  `);
-  const info = stmt.run(title, description, eventDate, eventTime, venueID);
-  return find(info.lastInsertRowid);
+// Get event by ID
+async function getById(id) {
+  try {
+    const res = await pool.query('SELECT * FROM event WHERE eventid = $1', [id]);
+    return res.rows[0];
+  } catch (err) {
+    console.error('Error fetching event by ID:', err);
+    throw err;
+  }
 }
 
-function update(eventID, { title, description, eventDate, eventTime, venueID }) {
-  const stmt = db.prepare(`
-    UPDATE events
-    SET title = ?, description = ?, eventDate = ?, eventTime = ?, venueID = ?
-    WHERE eventID = ?
-  `);
-  const info = stmt.run(title, description, eventDate, eventTime, venueID, eventID);
-  return info.changes > 0 ? find(eventID) : null;
+// Update event by ID
+async function update(id, { title, description, eventdate, eventtime, venueid }) {
+  console.log('DAO update called with:', { id, title, description, eventdate, eventtime, venueid });
+
+  const result = await pool.query(
+    `UPDATE event SET title = $1, description = $2, eventdate = $3, eventtime = $4, venueid = $5
+     WHERE eventid = $6 RETURNING *`,
+    [title, description, eventdate, eventtime, venueid, id]
+  );
+
+  console.log('DAO update result:', result.rows[0]);
+  return result.rows[0];
 }
 
-function destroy(eventID) {
-  const info = db.prepare('DELETE FROM events WHERE eventID = ?').run(eventID);
-  return info.changes > 0;
+async function deleteEvent(id) {
+  console.log('DAO delete called with:', { id });
+
+  const result = await pool.query(
+    `DELETE FROM event WHERE eventid = $1 RETURNING *`,
+    [id]
+  );
+
+  console.log('DAO delete result:', result.rows[0]);
+  return result.rows[0];
 }
 
-module.exports = { all, find, create, update, destroy };
+module.exports = { all, create, getById, update, deleteEvent };

@@ -1,0 +1,127 @@
+<html lang="en">
+<!DOCTYPE html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Event Creation</title>
+  <link rel="stylesheet" type="text/css" href="ECreation.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body>
+
+  <div id="msg"></div>
+
+  <div class="list">
+    <h2>Events</h2>
+    <button id="refreshBtn" type="button">Refresh List</button>
+    <ul id="eventList"></ul>
+  </div>
+
+  <div class="form">
+    <fieldset>
+      <legend>Create a New Event</legend>
+      <form id="createForm">
+
+        <label for="title">Event Name<span>*</span></label>
+        <input type="text" id="title" placeholder="Enter the name of the event" required="">
+
+        <label for="description">Event description<span>*</span></label>
+        <input type="text" id="description" placeholder="Enter the description of the event" required="">
+
+        <label for="eventdate">Date<span>*</span></label>
+        <input type="date" id="eventdate" required="">
+
+        <label for="eventtime">Event Time<span>*</span></label>
+        <input type="time" id="eventtime" required="">
+
+        <label for="venueid">Venue ID<span>*</span></label>
+        <input type="number" id="venueid" placeholder="Enter the venue ID for the event" required="">
+
+
+        <button type="submit">Add Event</button>
+      </form>
+    </fieldset>
+
+  </div>
+
+  <div class="form">
+    <fieldset>
+      <legend>Update Existing Event</legend>
+      <form id="updateForm">
+
+        <label for="currentTitle">Current Event Name<span>*</span></label>
+        <input type="text" id="currentTitle" placeholder="Enter the current name of the event" required="">
+
+        <label for="updatedTitle">Updated Event Name<span>*</span></label>
+        <input type="text" id="updatedTitle" placeholder="Enter the updated name of the event" required="">
+
+        <label for="updatedDescription">Updated Event description<span>*</span></label>
+        <input type="text" id="updatedDescription" placeholder="Enter the description of the event" required="">
+
+        <label for="updatedEventDate">Updated Event Date<span>*</span></label>
+        <input type="date" id="updatedEventDate" required="">
+
+        <label for="updatedEventTime">Updated Event Time<span>*</span></label>
+        <input type="time" id="updatedEventTime" required="">
+
+        <label for="updatedVenueID">Updated Venue ID<span>*</span></label>
+        <input type="number" id="updatedVenueID" placeholder="Enter the venue ID for the event" required="">
+
+        <input type="hidden" id="updatedEventID">
+
+        <button type="submit">Update Event</button>
+      </form>
+    </fieldset>
+
+  </div>
+
+  <div class="form">
+    <fieldset>
+      <legend>Delete Existing Event</legend>
+      <form id="deleteForm">
+
+        <label for="deletedTitle">Event Name<span>*</span></label>
+        <input type="text" id="deletedTitle" placeholder="Enter the name of the event to be deleted" required="">
+
+        <input type="hidden" id="deletedEventID">
+
+        <button type="submit">Delete Event</button>
+      </form>
+    </fieldset>
+
+  </div>
+
+
+  <div class="calendar">
+
+    <div id="month-year"></div>
+
+    <button id="previous-month">
+      <span class="material-icons">chevron_left</span>
+    </button>
+
+    <button id="next-month">
+      <span class="material-icons">chevron_right</span>
+    </button>
+
+    <div class="weekdays">
+      <div title="Sunday">Sun</div>
+      <div title="Monday">Mon</div>
+      <div title="Tuesday">Tue</div>
+      <div title="Wednesday">Wed</div>
+      <div title="Thursday">Thu</div>
+      <div title="Friday">Fri</div>
+      <div title="Saturday">Sat</div>
+    </div>
+
+    <div id="days"></div>
+
+  </div>
+
+  <script src="../controller/ECreation.js"></script>
+
+</body>
+
+</html>

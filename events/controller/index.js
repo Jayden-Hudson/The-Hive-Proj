@@ -2,7 +2,8 @@
 
 const express = require('express');
 const cors = require('cors');
-const itemsRouter = require('../../../../../../../../../Desktop/events/src/main/java/dev/hannah/events/controller/routes/events');
+
+const itemsRouter = require('./routes/events');
 
 const app = express();
 
@@ -11,33 +12,22 @@ app.use(cors());
 app.use(express.json());
 
 // Health check
-app.get('/__ping', (req, res) => {
-  res.json({ ok: true });
-});
+app.get('/__ping', (req, res) => res.json({ ok: true }));
 
-// Items API (students will adapt this to their project concept)
-app.use('/events', itemsRouter);
+// Mount the router for events
+app.use('/events', itemsRouter); // all event routes handled in router
 
-// 404 handler – for unknown routes
+// 404 handler
 app.use((req, res) => {
-  res.status(404).json({
-    error: { code: 'NOT_FOUND', message: 'Route not found' }
-  });
+  res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Route not found' } });
 });
 
 // Global error handler
 app.use((err, req, res, next) => {
   console.error('[ERROR]', err);
   const status = err.status || 500;
-  res.status(status).json({
-    error: {
-      code: 'SERVER_ERROR',
-      message: err.message || 'Unexpected server error'
-    }
-  });
+  res.status(status).json({ error: { code: 'SERVER_ERROR', message: err.message || 'Unexpected server error' } });
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () =>
-  console.log(`Web 3 project API listening on http://127.0.0.1:${PORT}`)
-);
+app.listen(PORT, () => console.log(`Web 3 project API listening on http://127.0.0.1:${PORT}`));
