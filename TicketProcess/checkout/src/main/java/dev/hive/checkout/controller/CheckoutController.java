@@ -1,0 +1,155 @@
+package dev.hive.checkout.controller;
+
+import dev.hive.checkout.entity.Checkout;
+import org.springframework.web.bind.annotation.*;
+
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+
+@RestController
+public class CheckoutController {
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    @PostMapping("/api/checkout")
+    public String addCheckoutData(@RequestBody Checkout checkout) {
+        // Print received data
+        System.out.println("Received data for checkout order# " + checkout.getConfirmationNumber());
+        try {
+            KeyHolder keyHolder = new GeneratedKeyHolder();
+            KeyHolder keyHolder2 = new GeneratedKeyHolder(); //tb-erased
+
+            String buyerSql = """
+                    INSERT INTO public.buyer
+                    (firstname, lastname, email, phone)
+                    VALUES (?, ?, ?, ?)
+                    RETURNING buyerid
+                """;
+
+            int buyerRows = jdbcTemplate.update(connection -> {
+                PreparedStatement ps = connection.prepareStatement(buyerSql, Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, checkout.getFirstName());
+                ps.setString(2, checkout.getLastName());
+                ps.setString(3, checkout.getEmail());
+                ps.setString(4, checkout.getPhone());
+                return ps;
+            }, keyHolder);
+
+            // Get generated event ID
+            Number buyerid = keyHolder.getKey();
+            if (buyerid == null) {
+                throw new RuntimeException("Failed to retrieve generated buyer ID");
+            }
+
+            String cardInfoSql = """
+                    INSERT INTO public.cardinfo
+                    (cardnum, expirationmonth, cvv, address, city, state, zip, expirationyear, buyerid)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    RETURNING cardid
+                """;
+
+            int cardInfoRows = jdbcTemplate.update(connection -> {
+                PreparedStatement ps = connection.prepareStatement(cardInfoSql, Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, checkout.getCardNumber());
+                ps.setString(2, checkout.getExpirationMonth());
+                ps.setString(3, checkout.getCvv());
+                ps.setString(4, checkout.getAddress());
+                ps.setString(5, checkout.getCity());
+                ps.setString(6, checkout.getState());
+                ps.setString(7, checkout.getZip());
+                ps.setString(8, checkout.getExpirationYear());
+                ps.setInt(9, buyerid.intValue());
+                return ps;
+            }, keyHolder2);
+
+            // can eventually remove!! cardid not used as fk
+            Number cardid = keyHolder2.getKey();
+            if (cardid == null) {
+                throw new RuntimeException("Failed to retrieve generate card ID");
+            }
+
+            String orderSql = """
+                    INSERT INTO public.orders
+                    (confirmationnum, ticketprice, salestax, passprice, protectionprice, ordertotal, orderdate, buyerid)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """;
+
+            int orderRows = jdbcTemplate.update(connection -> {
+                PreparedStatement ps = connection.prepareStatement(orderSql);
+                ps.setString(1, checkout.getConfirmationNumber());
+                ps.setBigDecimal(2, checkout.getTicketPrice());
+                ps.setBigDecimal(3, checkout.getSalesTax());
+                ps.setBigDecimal(4, checkout.getPassPrice());
+                ps.setBigDecimal(5, checkout.getProtectionPrice());
+                ps.setBigDecimal(6, checkout.getOrderTotal());
+                ps.setString(7, checkout.getOrderDate());
+                ps.setInt(8, buyerid.intValue());
+                return ps;
+            });
+
+            return (cardInfoRows > 0 && buyerRows > 0 && orderRows > 0)
+                    ? "Data inserted successfully"
+                    : "Insert failed";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Error inserting data: " + e.getMessage();
+        }
+    }
+}
+
+/*
+came after... Number cardid = ...
+int cardInfoRows = jdbcTemplate.update(cardInfoSql,
+    checkout.getCardNumber(),
+    checkout.getExpirationMonth(),
+    checkout.getCvv(),
+    checkout.getAddress(),
+    checkout.getCity(),
+    checkout.getState(),
+    checkout.getZip(),
+    checkout.getExpirationYear(),
+    buyerid.intValue()
+);
+return cardInfoRows > 0 ? "Data inserted successfully" : "Insert failed";
+*/
+
+/* for testing
+    @PostMapping("/api/checkout")
+    public String checkoutData(@RequestBody Checkout checkoutData) {
+        System.out.println("Data incoming..." + " " +
+
+        checkoutData.getEmail() + " " +
+        checkoutData.getFirstName() + " " +
+        checkoutData.getLastName() + " " +
+        checkoutData.getPhone() + " " +
+
+        checkoutData.getAddress() + " " +
+        checkoutData.getCity() + " " +
+        checkoutData.getState() + " " +
+        checkoutData.getZip() + " " +
+        checkoutData.getCardNumber() + " " +
+        checkoutData.getExpirationMonth() + " " +
+        checkoutData.getExpirationYear() + " " +
+        checkoutData.getCvv() + " " +
+        checkoutData.getConfirmationNumber() + " " +
+        checkoutData.getTicketPrice() + " " +
+        checkoutData.getSalesTax() + " " +
+        checkoutData.getPassPrice() + " " +
+        checkoutData.getProtectionPrice() + " " +
+        checkoutData.getOrderTotal() + " " +
+        checkoutData.getOrderDate());
+        //phone
+        return "Checkout success!";
+    }
+} */
+
+
+
+
+
