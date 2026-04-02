@@ -206,6 +206,23 @@ CREATE TABLE ticket (
         FOREIGN KEY (eventid) REFERENCES event(eventid)
 );
 
+CREATE TABLE moshpitticket (
+    pitticketid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    pitid INT NOT NULL,
+    eventid INT NOT NULL,
+    orderid INT,
+    sold BOOLEAN NOT NULL DEFAULT FALSE,
+    price NUMERIC(10,2) NOT NULL,
+    qrcode VARCHAR(255),
+    checkintime TIMESTAMP,
+    CONSTRAINT fk_moshpitticket_pit
+        FOREIGN KEY (pitid) REFERENCES moshpit(pitid),
+    CONSTRAINT fk_moshpitticket_event
+        FOREIGN KEY (eventid) REFERENCES event(eventid),
+    CONSTRAINT fk_moshpitticket_order
+        FOREIGN KEY (orderid) REFERENCES orders(orderid)
+);
+
 
 CREATE TABLE seathold (
     holdid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
