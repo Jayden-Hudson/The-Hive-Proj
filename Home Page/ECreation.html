@@ -1,95 +1,102 @@
+<html lang="en">
 <!DOCTYPE html>
+
 <head>
-    <meta charset="UTF-8" />
-    <title>Event Creation</title>
-     <link rel="stylesheet" type="text/css" href="ECreation.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <title>Event Creation</title>
+  <link rel="stylesheet" type="text/css" href="ECreation.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
 <body>
 
-    <header>
-        <h1>Goldenfield Venue</h1>
-            <nav>
-                <ul class="navbar">
-                    <li><a href="Home.html">Home</a></li>
-                    <li><a href="TicketProcess.html">Get Tickets</a></li>
-                    <li><a href="EventRequest.html">Request Event</a></li>
-                    <li><a href="ECreation.html">Create Event</a></li>
-                    <li><a href="Calendar.html">Calendar</a></li>
-                </ul>
-            </nav>
-    </header>
-    
-<div class="list">
-<h2>Current Event List</h2>
-  <button id="refreshBtn" type="button">Refresh List</button>
-  <ul id="eventList"></ul>
-</div>
+  <div id="msg"></div>
 
+  <div class="list">
+    <h2>Events</h2>
+    <button id="refreshBtn" type="button">Refresh List</button>
+    <ul id="eventList"></ul>
+  </div>
 
-    <div class="form">
-        <fieldset>
-            <legend>Create a New Event</legend>
-            <form id="addForm">
+  <div class="form">
+    <fieldset>
+      <legend>Create a New Event</legend>
+      <form id="createForm">
 
         <label for="title">Event Name<span>*</span></label>
         <input type="text" id="title" placeholder="Enter the name of the event" required="">
 
         <label for="description">Event description<span>*</span></label>
-       <input type="text" id="description" placeholder="Enter the description of the event" required="">
+        <input type="text" id="description" placeholder="Enter the description of the event" required="">
 
-        <label for="eventDate">Date<span>*</span></label>
-      <input type="text" id="eventDate" placeholder="Enter the date of the event (YYYY-MM-DD)" required="">
+        <label for="eventdate">Date<span>*</span></label>
+        <input type="date" id="eventdate" required="">
 
-        <label for="eventTime">Event Time<span>*</span></label>
-        <input type="text" id="eventTime" placeholder="Enter the time of the event" required="">
+        <label for="eventtime">Event Time<span>*</span></label>
+        <input type="time" id="eventtime" required="">
 
-        <label for="venueID">Venue ID<span>*</span></label>
-     <input type="number" id="venueID" placeholder="Enter the venue ID for the event" required="">
+        <label for="venueid">Venue ID<span>*</span></label>
+        <input type="number" id="venueid" placeholder="Enter the venue ID for the event" required="">
 
 
         <button type="submit">Add Event</button>
-    </form>
+      </form>
     </fieldset>
-    
-</div>
 
-<div class="form">
+  </div>
+
+  <div class="form">
     <fieldset>
-        <legend>Update Existing Event</legend>
-        <form id="updateForm">
+      <legend>Update Existing Event</legend>
+      <form id="updateForm">
 
-            <label for="title">Event Name<span>*</span></label>
-            <input type="text" id="updatedTitle" placeholder="Enter the name of the event" required="">
+        <label for="currentTitle">Current Event Name<span>*</span></label>
+        <input type="text" id="currentTitle" placeholder="Enter the current name of the event" required="">
 
-            <label for="description">Event description<span>*</span></label>
-            <input type="text" id="updatedDescription" placeholder="Enter the description of the event" required="">
+        <label for="updatedTitle">Updated Event Name<span>*</span></label>
+        <input type="text" id="updatedTitle" placeholder="Enter the updated name of the event" required="">
 
-            <label for="eventDate">Date<span>*</span></label>
-            <input type="text" id="updatedEventDate" placeholder="Enter the date of the event (YYYY-MM-DD)" required="">
+        <label for="updatedDescription">Updated Event description<span>*</span></label>
+        <input type="text" id="updatedDescription" placeholder="Enter the description of the event" required="">
 
-            <label for="eventTime">Event Time<span>*</span></label>
-            <input type="text" id="updatedEventTime" placeholder="Enter the time of the event" required="">
+        <label for="updatedEventDate">Updated Event Date<span>*</span></label>
+        <input type="date" id="updatedEventDate" required="">
 
-            <label for="venueID">Venue ID<span>*</span></label>
-            <input type="number" id="updatedVenueID" placeholder="Enter the venue ID for the event" required="">
+        <label for="updatedEventTime">Updated Event Time<span>*</span></label>
+        <input type="time" id="updatedEventTime" required="">
 
-            <!-- hidden field to store the eventID being edited -->
-            <input type="hidden" id="updatedEventID">
+        <label for="updatedVenueID">Updated Venue ID<span>*</span></label>
+        <input type="number" id="updatedVenueID" placeholder="Enter the venue ID for the event" required="">
 
+        <input type="hidden" id="updatedEventID">
 
-            <button type="submit">Update Event</button>
-        </form>
+        <button type="submit">Update Event</button>
+      </form>
     </fieldset>
 
-</div>
+  </div>
+
+  <div class="form">
+    <fieldset>
+      <legend>Delete Existing Event</legend>
+      <form id="deleteForm">
+
+        <label for="deletedTitle">Event Name<span>*</span></label>
+        <input type="text" id="deletedTitle" placeholder="Enter the name of the event to be deleted" required="">
+
+        <input type="hidden" id="deletedEventID">
+
+        <button type="submit">Delete Event</button>
+      </form>
+    </fieldset>
+
+  </div>
 
 
-    <div class="calendar">
+  <div class="calendar">
 
-    <div id="month-year">February 2026</div>
+    <div id="month-year"></div>
 
     <button id="previous-month">
       <span class="material-icons">chevron_left</span>
@@ -109,14 +116,12 @@
       <div title="Saturday">Sat</div>
     </div>
 
-    <div id="days"><div class="calendarDay"><div class="dayNumber">1</div><div class="dayEventsContainer"><div class="eventSmall">Test</div><div class="eventSmall">Test2</div><div class="eventSmall">Test2</div></div></div><div class="calendarDay"><div class="dayNumber">2</div></div><div class="calendarDay"><div class="dayNumber">3</div></div><div class="calendarDay"><div class="dayNumber">4</div><div class="dayEventsContainer"><div class="eventSmall">Test3</div></div></div><div class="calendarDay"><div class="dayNumber">5</div></div><div class="calendarDay"><div class="dayNumber">6</div></div><div class="calendarDay"><div class="dayNumber">7</div></div><div class="calendarDay"><div class="dayNumber">8</div></div><div class="calendarDay"><div class="dayNumber">9</div></div><div class="calendarDay"><div class="dayNumber">10</div></div><div class="calendarDay"><div class="dayNumber">11</div></div><div class="calendarDay"><div class="dayNumber">12</div></div><div class="calendarDay"><div class="dayNumber">13</div></div><div class="calendarDay"><div class="dayNumber">14</div></div><div class="calendarDay"><div class="dayNumber">15</div></div><div class="calendarDay"><div class="dayNumber">16</div></div><div class="calendarDay"><div class="dayNumber">17</div></div><div class="calendarDay"><div class="dayNumber">18</div></div><div class="calendarDay"><div class="dayNumber">19</div></div><div class="calendarDay"><div class="dayNumber">20</div></div><div class="calendarDay"><div class="dayNumber">21</div></div><div class="calendarDay"><div class="dayNumber">22</div></div><div class="calendarDay"><div class="dayNumber">23</div></div><div class="calendarDay"><div class="dayNumber">24</div></div><div class="calendarDay"><div class="dayNumber">25</div></div><div class="calendarDay"><div class="dayNumber">26</div></div><div class="calendarDay"><div class="dayNumber">27</div></div><div class="calendarDay"><div class="dayNumber">28</div></div></div>
+    <div id="days"></div>
 
   </div>
-  
 
-
-    <script src="ECreation.js"></script>
-
+  <script src="ECreation.js"></script>
 
 </body>
+
 </html>

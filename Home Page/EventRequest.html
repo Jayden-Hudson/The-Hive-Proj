@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <link rel="stylesheet" type="text/css" href="ERequest.css">
+    </head>
+    <body>
+        <div>
+            <h1>Booking Request Form</h1>
+            <form>
+                <fieldset>
+                    <legend>Event Information</legend>
+                    <p class="requiredField">Indicates a Required Field *</p>
+                    <label for="type">Event Type<span>*</span></label>
+                    <select id="type" required>
+                        <option value="" hidden>Select event type...</option>
+                        <option value="live concert">Live concert</option>
+                        <option value="theater">Theater</option>
+                        <option value="public ticketed concert">Public ticketed concert</option>
+                        <option value="private party">Private party</option>
+                        <option value="other">Other</option>
+                        <!--Other options to be added-->
+                        <option>...</option>
+                        <option>...</option>
+                        <option>...</option>
+                    </select>
+                    <label for="performers">Special Performer(s)<span>*</span></label>
+                    <input type="text" id="performers" required>
+                    <label for="startDate">Start Date<span>*</span></label>
+                    <input type="date" id="startDate" required>
+                    <label for="endDate">End Date<span>*</span></label>
+                    <input type="date" id="endDate" required>
+                    <!--Start time may not be necessary-->
+                    <!--<label for="time">Desired Start Time</label>
+                    <input type="text" id="time">-->
+                    <label for="attendance">Expected Attendance<span>*</span></label>
+                    <input type="text" id="attendance" required>
+                    <label for="ages">Attendee Age Range<span>*</span></label>
+                    <select id="ages" required>
+                        <option value="" hidden>Select an age range...</option>
+                        <option value="21+">21+</option>
+                        <option value="18+">18+</option>
+                        <option value="16+">16+</option>
+                        <option value="all ages">All ages</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <label for="budget">Event Budget<span>*</span></label>
+                    <input  type="text" id="budget" required>
+                    <label for="other" id="otherLabel" class="hidden">Please specify 'Other' age selection<span>*</span></label>
+                    <input type="text" id="other" class="hidden">
+                    <label for="details">Additional Event Details</label>
+                    <textArea id="details"></textArea>
+                </fieldset>
+                <fieldset>
+                    <legend>Contact Information</legend>
+                    <p class="requiredField">Indicates a Required Field *</p>
+                    <label for="company">Promoter/Event Planner Company Name<span>*</span></label>
+                    <input type="text" id="company" required>
+                    <label for="fullName">Contact Person (First & Last name)<span>*</span></label>
+                    <input type="text" id="fullName" required>
+                    <label for="phone">Phone<span>*</span></label>
+                    <input type="text" id="phone" required>
+                    <label for="email">Email<span>*</span></label>
+                    <input type="text" id="email" required>
+                    <label id="emailMessage" class="invalidLabel"></label>
+                    <label for="reached">Best Time to be Reached</label>
+                    <select id="reached">
+                        <option value="" hidden>Select a time...</option>
+                        <option value="morning">8:00 AM - Noon</option>
+                        <option value="afternoon">Noon - 4:00 PM</option>
+                        <option value="evening">4:00 PM - 8:00 PM</option>
+                    </select>
+                    <!--Extra, not necessary-->
+                    <!--<label for="method">Preferred Method of Contact</label>
+                    <label for="phoneBox">phone</label>
+                    <input type="checkbox" id="phoneBox" name="phone" value="Phone">
+                    <input type="checkBox" id="emailBox" name="email" value="Email">
+                    <input type="checkbox" id="bothBox" name="both" value="Both">-->
+                    <label for="links">Company Website or Social Media Links</label>
+                    <input type="text" id="links">
+                    <label for="notes">Additional Notes</label>
+                    <textarea id="notes"> </textarea>
+                </fieldset>
+                <input type="submit" id="submitButton">
+            </form>
+        </div>
+       <script src="ERequestscript.js"></script>
+    </body>
+</html>
