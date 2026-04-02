@@ -218,6 +218,16 @@ CREATE TABLE seathold (
         FOREIGN KEY (buyerid) REFERENCES buyer(buyerid)
 );
 
+CREATE TABLE moshpit (
+    pitid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    eventid INT NOT NULL UNIQUE,
+    pitname VARCHAR(100) NOT NULL DEFAULT 'Mosh Pit',
+    maxcapacity INT NOT NULL DEFAULT 150 CHECK (maxcapacity <= 150),
+    peopleassigned INT NOT NULL DEFAULT 0,
+    soldout BOOLEAN NOT NULL DEFAULT FALSE,
+    CONSTRAINT fk_moshpit_event
+        FOREIGN KEY (eventid) REFERENCES event(eventid)
+);
 
 -- PAYMENT / REFUND / COUPON TABLES
 
