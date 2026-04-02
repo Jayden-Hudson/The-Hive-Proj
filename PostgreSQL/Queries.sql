@@ -115,6 +115,7 @@ CREATE TABLE employee (
     releaseddate DATE,
     managerid INT,
     departmentid INT,
+    employee CHAR (50),
     CONSTRAINT fk_employee_manager
         FOREIGN KEY (managerid) REFERENCES employee(employeeid),
     CONSTRAINT fk_employee_department
