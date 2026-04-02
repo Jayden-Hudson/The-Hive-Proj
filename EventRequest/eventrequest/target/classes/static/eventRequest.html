@@ -2,17 +2,17 @@
 <html>
     <head>
         <title></title>
-        <link rel="stylesheet" type="text/css" href="style.css">
+        <link rel="stylesheet" type="text/css" href="eventRequestStyle.css">
     </head>
     <body>
         <div>
             <h1>Booking Request Form</h1>
-            <form>
+            <form id="form">
                 <fieldset>
                     <legend>Event Information</legend>
                     <p class="requiredField">Indicates a Required Field *</p>
-                    <label for="type">Event Type<span>*</span></label>
-                    <select id="type" required>
+                    <label for="eventType">Event Type<span>*</span></label>
+                    <select id="eventType" required>
                         <option value="" hidden>Select event type...</option>
                         <option value="live concert">Live concert</option>
                         <option value="theater">Theater</option>
@@ -28,11 +28,20 @@
                     <input type="text" id="performers" required>
                     <label for="startDate">Start Date<span>*</span></label>
                     <input type="date" id="startDate" required>
-                    <label for="endDate">End Date<span>*</span></label>
-                    <input type="date" id="endDate" required>
-                    <!--Start time may not be necessary-->
-                    <!--<label for="time">Desired Start Time</label>
-                    <input type="text" id="time">-->
+                    <label for="startTime">Desired Start Time<span>*</span></label>
+                    <select id="startTime">
+                        <option value="" hidden>Select a start time...</option>
+                        <option value="12">12:00 PM</option>
+                        <option value="1">1:00 PM</option>
+                        <option value="2">2:00 PM</option>
+                        <option value="3">3:00 PM</option>
+                        <option value="4">4:00 PM</option>
+                        <option value="5">5:00 PM</option>
+                        <option value="6">6:00 PM</option>
+                        <option value="7">7:00 PM</option>
+                        <option value="8">8:00 PM</option>
+                        <option value="9">9:00 PM</option>
+                    </select>
                     <label for="attendance">Expected Attendance<span>*</span></label>
                     <input type="text" id="attendance" required>
                     <label for="ages">Attendee Age Range<span>*</span></label>
@@ -44,46 +53,41 @@
                         <option value="all ages">All ages</option>
                         <option value="other">Other</option>
                     </select>
+                    <label for="otherLabel" class="hidden">Please specify 'Other' age selection<span>*</span></label>
+                    <input type="text" id="otherLabel" class="hidden">
                     <label for="budget">Event Budget<span>*</span></label>
                     <input  type="text" id="budget" required>
-                    <label for="other" id="otherLabel" class="hidden">Please specify 'Other' age selection<span>*</span></label>
-                    <input type="text" id="other" class="hidden">
-                    <label for="details">Additional Event Details</label>
-                    <textArea id="details"></textArea>
+
+                    <label for="eventDetails">Additional Event Details</label>
+                    <textArea id="eventDetails"></textArea>
                 </fieldset>
                 <fieldset>
                     <legend>Contact Information</legend>
-                    <p class="requiredField">Indicates a Required Field *</p>
                     <label for="company">Promoter/Event Planner Company Name<span>*</span></label>
                     <input type="text" id="company" required>
-                    <label for="fullName">Contact Person (First & Last name)<span>*</span></label>
-                    <input type="text" id="fullName" required>
+                    <label for="firstName">Contact Person<span>*</span></label>
+                    <input type="text" id="firstName" required placeholder="First Name...">
+                    <input type="text" id="lastName" placeholder="Last name..." required>
                     <label for="phone">Phone<span>*</span></label>
                     <input type="text" id="phone" required>
                     <label for="email">Email<span>*</span></label>
                     <input type="text" id="email" required>
                     <label id="emailMessage" class="invalidLabel"></label>
-                    <label for="reached">Best Time to be Reached</label>
-                    <select id="reached">
+                    <label for="contactTime">Best Time to be Reached</label>
+                    <select id="contactTime">
                         <option value="" hidden>Select a time...</option>
                         <option value="morning">8:00 AM - Noon</option>
                         <option value="afternoon">Noon - 4:00 PM</option>
                         <option value="evening">4:00 PM - 8:00 PM</option>
                     </select>
-                    <!--Extra, not necessary-->
-                    <!--<label for="method">Preferred Method of Contact</label>
-                    <label for="phoneBox">phone</label>
-                    <input type="checkbox" id="phoneBox" name="phone" value="Phone">
-                    <input type="checkBox" id="emailBox" name="email" value="Email">
-                    <input type="checkbox" id="bothBox" name="both" value="Both">-->
                     <label for="links">Company Website or Social Media Links</label>
                     <input type="text" id="links">
-                    <label for="notes">Additional Notes</label>
-                    <textarea id="notes"> </textarea>
+                    <label for="contactNotes">Additional Notes</label>
+                    <textarea id="contactNotes"> </textarea>
                 </fieldset>
                 <input type="submit" id="submitButton">
             </form>
         </div>
-       <script src="script.js"></script>
+      <script src="eventRequestScript.js"></script>
     </body>
 </html>
