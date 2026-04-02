@@ -194,7 +194,6 @@ CREATE TABLE ticket (
     orderid INT,
     price NUMERIC(10,2) NOT NULL,
     eventid INT NOT NULL,
-    qrcode VARCHAR(255),
     checkintime TIMESTAMP,
     CONSTRAINT fk_ticket_section
         FOREIGN KEY (sectionid) REFERENCES sections(sectionid),
