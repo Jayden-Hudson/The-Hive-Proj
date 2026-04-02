@@ -55,7 +55,7 @@ main {
 .button-section {
     background-color: white;
     max-width: 800px;
-    margin: 0 auto;
+    margin: 0 auto 30px auto;
     padding: 40px 20px;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
@@ -84,4 +84,34 @@ main {
 .button:hover {
     background-color: var(--accent);
     color: white;
+}
+
+.calendar-section {
+    display: flex;
+    justify-content: center;
+}
+
+.calendar {
+    width: 90%;
+    max-width: 700px;
+    background-color: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.weekdays,
+    #days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+}
+
+.weekdays {
+      margin-bottom: 30px;
+}
+
+#days div.selected {
+      background: #491ceb;
+      color: white;
 }

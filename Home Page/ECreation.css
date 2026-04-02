@@ -1,3 +1,9 @@
+:root{
+    --primary:#FFC533;
+    --accent:#C76B12;
+    --base:#1F1B16;
+    --surface:#F4E6C8;
+}
 input {
     width: 100%;
     box-sizing: border-box;
