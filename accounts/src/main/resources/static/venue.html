@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Venue</title>
+    <link rel="stylesheet" href="account.css">
+</head>
+<body>
+
+<h1>Creating Venue</h1>
+
+<label>Name</label><br>
+<input id="name" placeholder="Venue name" required><br>
+
+<label>Address</label><br>
+<input id="address" placeholder="Address" required><br>
+
+<label for="city">City</label><br>
+<input id="city" placeholder="City" required><br>
+
+<label for="state">State</label><br>
+<input id="state" placeholder="State" required><br>
+
+<div class="btn-field">
+    <button type="button" id="Create">Create</button>
+</div>
+
+<div id="message"></div>
+
+<script>
+    const API_URL = "http://localhost:8080/api/venues";
+
+    const nameInput = document.getElementById("name");
+    const addressInput = document.getElementById("address");
+    const cityInput = document.getElementById("city");
+    const stateInput = document.getElementById("state");
+    const capacityInput = document.getElementById("capacity"); // optional
+
+    const createBtn = document.getElementById("Create");
+    const message = document.getElementById("message");
+
+    createBtn.addEventListener("click", async () => {
+
+        message.textContent = "";
+
+        if (!nameInput.value || !addressInput.value || !cityInput.value || !stateInput.value) {
+            message.textContent = "Please fill out all required fields.";
+            message.style.color = "red";
+            return;
+        }
+
+        const newVenue = {
+            name: nameInput.value.trim(),
+            address: addressInput.value.trim(),
+            city: cityInput.value.trim(),
+            state: stateInput.value.trim(),
+            capacity: capacityInput.value ? parseInt(capacityInput.value) : undefined
+        };
+
+        try {
+            const res = await fetch(API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(newVenue)
+            });
+
+            if (res.ok) {
+                message.textContent = "Venue has been created!";
+                message.style.color = "green";
+
+                // Optional: redirect after 1.5 seconds
+                setTimeout(() => {
+                    window.location.href = "venues.html"; // or wherever you want
+                }, 1500);
+
+            } else {
+                message.textContent = "Error creating venue.";
+                message.style.color = "red";
+            }
+
+        } catch (error) {
+            console.error(error);
+            message.textContent = "Cannot connect to server.";
+            message.style.color = "red";
+        }
+    });
+</script>
+</body>
+</html>
