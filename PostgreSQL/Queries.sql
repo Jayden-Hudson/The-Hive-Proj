@@ -109,16 +109,30 @@ CREATE TABLE employee (
     zipcode VARCHAR(10),
     city VARCHAR(100),
     state CHAR(2),
-    salary NUMERIC(10,2),
-    wagerate NUMERIC(10,2),
-    hiredate DATE NOT NULL,
-    releaseddate DATE,
     managerid INT,
     departmentid INT,
     employee CHAR (50),
     CONSTRAINT fk_employee_manager
         FOREIGN KEY (managerid) REFERENCES employee(employeeid),
     CONSTRAINT fk_employee_department
+        FOREIGN KEY (departmentid) REFERENCES department(departmentid)
+);
+
+CREATE TABLE manager (
+    managerid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    employeeid INT UNIQUE NOT NULL,
+    firstname VARCHAR(100) NOT NULL,
+    lastname VARCHAR(100) NOT NULL,
+    address VARCHAR(255),
+    zipcode VARCHAR(10),
+    city VARCHAR(100),
+    state CHAR(2),
+    departmentid INT,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    passwordhash VARCHAR(255) NOT NULL,
+    CONSTRAINT fk_manager_employee
+        FOREIGN KEY (employeeid) REFERENCES employee(employeeid),
+    CONSTRAINT fk_manager_department
         FOREIGN KEY (departmentid) REFERENCES department(departmentid)
 );
 
@@ -326,3 +340,4 @@ CREATE TABLE scanner (
     CONSTRAINT fk_scanner_ticket
         FOREIGN KEY (ticketid) REFERENCES ticket(ticketid)
 );
+
