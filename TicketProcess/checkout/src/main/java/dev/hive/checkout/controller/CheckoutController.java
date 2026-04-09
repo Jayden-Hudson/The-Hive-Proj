@@ -13,16 +13,23 @@ import java.sql.Statement;
 @RestController
 public class CheckoutController {
 
+    // Print received data
+    //#1 Insert buyer information
+    //#2 Insert card information
+    //#3 Insert order information
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @PostMapping("/api/checkout")
     public String addCheckoutData(@RequestBody Checkout checkout) {
-        // Print received data
+        //for testing: compared getter value to console value to db value
         System.out.println("Received data for checkout order# " + checkout.getConfirmationNumber());
+
         try {
-            KeyHolder keyHolder = new GeneratedKeyHolder();
-            KeyHolder keyHolder2 = new GeneratedKeyHolder(); //tb-erased
+
+            /*/////////////////////////////// #1 - insert into buyer //////////////////////////////*/
+            KeyHolder buyerKeyHolder = new GeneratedKeyHolder();
 
             String buyerSql = """
                     INSERT INTO public.buyer
@@ -38,20 +45,20 @@ public class CheckoutController {
                 ps.setString(3, checkout.getEmail());
                 ps.setString(4, checkout.getPhone());
                 return ps;
-            }, keyHolder);
+            }, buyerKeyHolder);
 
-            // Get generated event ID
-            Number buyerid = keyHolder.getKey();
+            // get generated eventid for fk purposes
+            Number buyerid = buyerKeyHolder.getKey();
             if (buyerid == null) {
                 throw new RuntimeException("Failed to retrieve generated buyer ID");
             }
 
+            /*/////////////////////////////// #2 - insert into cardinfo - fk buyerid //////////////////////////////*/
             String cardInfoSql = """
                     INSERT INTO public.cardinfo
                     (cardnum, expirationmonth, cvv, address, city, state, zip, expirationyear, buyerid)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-                    RETURNING cardid
-                """;
+                    """;
 
             int cardInfoRows = jdbcTemplate.update(connection -> {
                 PreparedStatement ps = connection.prepareStatement(cardInfoSql, Statement.RETURN_GENERATED_KEYS);
@@ -65,14 +72,9 @@ public class CheckoutController {
                 ps.setString(8, checkout.getExpirationYear());
                 ps.setInt(9, buyerid.intValue());
                 return ps;
-            }, keyHolder2);
+            });
 
-            // can eventually remove!! cardid not used as fk
-            Number cardid = keyHolder2.getKey();
-            if (cardid == null) {
-                throw new RuntimeException("Failed to retrieve generate card ID");
-            }
-
+            /*/////////////////////////////// #3 - insert into orders - fk buyerid //////////////////////////////*/
             String orderSql = """
                     INSERT INTO public.orders
                     (confirmationnum, ticketprice, salestax, passprice, protectionprice, ordertotal, orderdate, buyerid)
@@ -92,6 +94,81 @@ public class CheckoutController {
                 return ps;
             });
 
+            /*/////////////////////////////// TO BE MOVED - triggered by place order button //////////////////////////////*/
+            /*/////////////////////////////// insert an event into event //////////////////////////////*/
+            KeyHolder eventKeyholder = new GeneratedKeyHolder();
+
+            String addEventSql = """
+                INSERT INTO public.event (title, description, eventdate, eventtime, venueid)
+                SELECT ?, ?, ?, ?, venueid
+                FROM public.venue
+                LIMIT 1
+                RETURNING eventid;
+                """;
+
+            //values - for testing
+            String title = "Loserville Tour";
+            String description = "Public ticketed concert";
+            java.sql.Date eventDate = java.sql.Date.valueOf("2026-05-15"); //yyyy-MM-dd
+            java.sql.Time eventTime = java.sql.Time.valueOf("14:00:00");   //HH:mm:ss
+
+            int newEventRow = jdbcTemplate.update(connection -> {
+                java.sql.PreparedStatement ps = connection.prepareStatement(addEventSql, Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, title);
+                ps.setString(2, description);
+                ps.setDate(3, eventDate);
+                ps.setTime(4, eventTime);
+                return ps;
+            }, eventKeyholder);
+
+            if (newEventRow > 0 && eventKeyholder.getKey() != null) {
+
+                //if inserting an event was successful...
+                //create a parkingByEvent record to track parking availability by event, AND
+                //one eventRows record for every record in the rows table (constants/static)
+                //to track row/ticket availability by event
+
+                int eventid = eventKeyholder.getKey().intValue();
+
+                /*/////////////////////////////// insert into parkingbyevent //////////////////////////////*/
+                String parkingSql = """
+                    INSERT INTO public.parkingbyevent
+                    (passesavailable, passessold, soldout, eventid)
+                    VALUES (?, ?, ?, ?)
+                """;
+
+                int passesAvailable = 57;
+                int passesSold = 0;
+                boolean soldOut = false;
+
+                int parkingRows = jdbcTemplate.update(connection -> {
+                    PreparedStatement ps = connection.prepareStatement(parkingSql);
+                    ps.setInt(1, passesAvailable);
+                    ps.setInt(2, passesSold);
+                    ps.setBoolean(3, soldOut);
+                    ps.setInt(4, eventid);
+                    return ps;
+                });
+
+                /*/////////////////////////////// insert records into eventrows //////////////////////////////*/
+                String eventRowsSql = """
+                    INSERT INTO public.eventrows (rowid, eventid, ticketssold, soldout)
+                    SELECT r.rowid, ?, r.numberoftickets, false
+                    FROM rows r
+                """;
+
+                int rowsByEvent = jdbcTemplate.update(eventRowsSql, eventid);
+
+                System.out.println("Event rows inserted: " + newEventRow);
+                System.out.println("Parking rows inserted: " + parkingRows);
+                System.out.println("Rows inserted for tracking rows by event: " + rowsByEvent);
+            } //if
+            /*/////////////////////////////// TO BE MOVED - END inserting eventrows and parkingbyevent for every event created //////////////////////////////*/
+
+            System.out.println("Buyer rows inserted: " + buyerRows);
+            System.out.println("Card info rows inserted: " + cardInfoRows);
+            System.out.println("Order rows inserted: " + orderRows);
+
             return (cardInfoRows > 0 && buyerRows > 0 && orderRows > 0)
                     ? "Data inserted successfully"
                     : "Insert failed";
@@ -102,6 +179,25 @@ public class CheckoutController {
         }
     }
 }
+
+  /*
+            //HERE
+            String selectSql = """
+                SELECT * FROM public.orders
+                WHERE ticketprice = ?
+                """;
+
+            List<Map<String, Object>> ordersWithPrice = jdbcTemplate.queryForList(
+                    selectSql,
+                    new java.math.BigDecimal("99.90") // Use BigDecimal for exact match on numeric
+            );
+
+            ordersWithPrice.forEach(order -> {
+                System.out.println("Order ID: " + order.get("id") + ", Ticket Price: " + order.get("ticketprice"));
+            });
+
+            //HERE
+            */
 
 /*
 came after... Number cardid = ...

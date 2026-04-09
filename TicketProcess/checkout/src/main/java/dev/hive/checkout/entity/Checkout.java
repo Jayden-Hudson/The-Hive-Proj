@@ -4,12 +4,12 @@ package dev.hive.checkout.entity;
 import java.math.BigDecimal;
 
 public class Checkout {
-
+    //buyer details
     private String email;
     private String firstName;
     private String lastName;
     private String phone;
-
+    //payment details
     private String address;
     private String city;
     private String state;
@@ -25,6 +25,34 @@ public class Checkout {
     private BigDecimal protectionPrice;
     private BigDecimal orderTotal;
     private String orderDate;
+    //purchased ticket details
+    private int section;
+    private int row;
+    private int tickets;
+
+    public int getTickets() {
+        return tickets;
+    }
+
+    public void setTickets(int tickets) {
+        this.tickets = tickets;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public int getSection() {
+        return section;
+    }
+
+    public void setSection(int section) {
+        this.section = section;
+    }
 
 
     public String getEmail() {
