@@ -8,6 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
 import java.util.Map;
 import java.sql.PreparedStatement;
 
@@ -61,77 +65,25 @@ public class EventCreationController {
             return "Error inserting data: " + e.getMessage();
         }
     }
+
+    @GetMapping("/api/events")
+    public List<EventCreation> getAllEvents() {
+        String selectSql = """
+            SELECT * FROM public.event
+            """;
+
+        return jdbcTemplate.query(selectSql, (rs, rowNum) -> {
+            EventCreation event = new EventCreation();
+            event.setEventid(rs.getInt("eventid"));
+            event.setTitle(rs.getString("title"));
+            event.setDescription(rs.getString("description"));
+            event.setEventDate(rs.getObject("eventdate", LocalDate.class));
+            event.setEventTime(rs.getObject("eventtime", LocalTime.class));
+            event.setVenueid(rs.getInt("venueid"));
+            return event;
+        });
+    }
+
 }
 
-// Attempt 1 @ fk
-/*
- * String eventSql = """
- * INSERT INTO public.eventrequest
- * (eventtype, performers, expectedattendance, agerange, additionaleventdetails,
- * eventbudget, starttime, startdate)
- * VALUES (?, ?, ?, ?, ?, ?, ?, ?)
- * """;
- * 
- * int eventRows = jdbcTemplate.update(eventSql,
- * event.getEventType(),
- * event.getPerformers(),
- * event.getAttendance(),
- * event.getAges(),
- * event.getEventDetails(),
- * event.getBudget(),
- * event.getStartTime(), // Ensure correct SQL type
- * event.getStartDate() // Ensure correct SQL type
- * );
- * 
- * String contactSql = """
- * INSERT INTO public.contactinfo
- * (companyname, contactfirstname, contactlastname, phone, email,
- * besttimetobereached, links, additionalcontactnotes)
- * VALUES (?, ?, ?, ?, ?, ?, ?, ?)
- * """;
- * 
- * int contactRows = jdbcTemplate.update(contactSql,
- * event.getCompany(),
- * event.getFirstName(),
- * event.getLastName(),
- * event.getPhone(),
- * event.getEmail(),
- * event.getContactTime(),
- * event.getLinks(), // Ensure correct SQL type
- * event.getContactNotes(),
- * eventSql// Ensure correct SQL type
- * );
- * return eventRows > 0 && contactRows > 0 ? "Data inserted successfully" :
- * "Insert failed";
- */
 
-// Testing retrieval of data with getters
-/*
- * @PostMapping("/api/eventrequest")
- * public String eventData(@RequestBody EventRequest eventData) throws
- * JsonProcessingException {
- * System.out.println("Event data received: " + eventData.getEventType() + " " +
- * eventData.getPerformers() + " " +
- * eventData.getStartDate() + " " +
- * eventData.getStartTime() + " " +
- * eventData.getAttendance() + " " +
- * eventData.getAges() + " " +
- * eventData.getOtherLabel() + " " +
- * eventData.getBudget() + " " +
- * eventData.getEventDetails());
- * 
- * System.out.println("Contact data received: " + eventData.getCompany() + " " +
- * eventData.getFirstName() + " " +
- * eventData.getLastName() + " " +
- * eventData.getPhone() + " " +
- * eventData.getEmail() + " " +
- * eventData.getContactTime() + " " +
- * eventData.getLinks() + " " +
- * eventData.getContactNotes());
- * 
- * //Returns eventData = {...}
- * System.out.println(new ObjectMapper().writeValueAsString(eventData));
- * //What's returned in webpage "alert"
- * return "Handled.";
- * }
- */

@@ -27,6 +27,35 @@ const els = {
   deletedEventID: document.getElementById('deletedEventID')
 };
 
+// Fetch events from server to show on list + calendar
+async function fetchEvents() {
+  try {
+    const res = await fetch('/api/events');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+
+    eventsCache = Array.isArray(data) ? data : [];
+
+    if (els.list) {
+      els.list.innerHTML = '';
+      if (eventsCache.length === 0) {
+        const li = document.createElement('li');
+        li.textContent = 'No events.';
+        els.list.appendChild(li);
+      } else {
+        for (const ev of eventsCache) {
+          els.list.appendChild(renderItem(ev));
+        }
+      }
+    }
+    
+      try { renderCalendar(); } catch (e) {  }
+
+  } catch (err) {
+    console.error('Failed to fetch events', err);
+    showMessage('Failed to load events: ' + err.message, true);
+  }
+}
 
 form.addEventListener('submit', function (event) {
   event.preventDefault(); //Prevent default form submission
@@ -42,7 +71,7 @@ form.addEventListener('submit', function (event) {
   console.log(eventData);
 
   //Send event data
-  fetch('http://localhost:8080/api/ECreation', {  //Replace these :8080/as/needed
+  fetch('http://localhost:8080/api/ECreation', {  
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -63,10 +92,14 @@ document.addEventListener('DOMContentLoaded', () => {
   els.form = els.form || document.getElementById('createForm');
   els.refresh = els.refresh || document.getElementById('refreshBtn');
 
-  els.form?.addEventListener('submit', handleAdd);
-  els.refresh?.addEventListener('click', loadItems);
+  // Wire refresh button to reload events and do an initial load
+  if (els.refresh) {
+    els.refresh.addEventListener('click', () => fetchEvents());
+  }
 
-  loadItems();
+  // initial events fetch
+  fetchEvents();
+
 });
 
 function validateEvent(obj) {
@@ -138,153 +171,6 @@ function populateUpdateForm(eventData) {
   els.updatedVenueID.value = eventData.venueid || '';
 }
 
-async function updateEvent(eventid, data) {
-
-  if (!eventid) {
-    showMessage('No event ID specified', true);
-    return;
-  }
-
-  // client-side validation before sending to server
-  const validation = validateEvent(data);
-  if (!validation.valid) {
-    showMessage('Validation error: ' + validation.errors.join(', '), true);
-    return;
-  }
-
-  console.log("EVENT ID BEING SENT:", eventid);
-
-  const res = await fetch(`${API_URL}/${eventid}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
-
-  if (res.status === 200) {
-    showMessage('Item updated successfully');
-    els.form.reset();
-    await loadItems();
-    return;
-  }
-
-  if (res.status === 422) {
-    let errJson = {};
-    try { errJson = await res.json(); } catch (_) { }
-    const details =
-      errJson?.error?.details?.join(', ') ||
-      errJson?.error?.message ||
-      'Invalid input';
-    showMessage('Validation error: ' + details, true);
-    return;
-  }
-
-  showMessage(`Unexpected status: ${res.status}`, true);
-}
-
-async function deleteEvent(eventid) {
-  const res = await fetch(`${API_URL}/${eventid}`, {
-    method: 'DELETE'
-  });
-
-  if (res.status === 204) {
-    showMessage('Item deleted.');
-    els.deleteForm?.reset();
-    await loadItems();
-    return;
-  }
-
-  if (res.status === 422) {
-    let errJson = {};
-    try { errJson = await res.json(); } catch (_) { }
-    const details =
-      errJson?.error?.details?.join(', ') ||
-      errJson?.error?.message ||
-      'Invalid input';
-    showMessage('Validation error: ' + details, true);
-    return;
-  }
-
-  showMessage(`Unexpected status: ${res.status}`, true);
-}
-
-
-
-async function loadItems() {
-  try {
-    const res = await fetch(API_URL);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const items = await res.json();
-    els.list.innerHTML = '';
-    if (!Array.isArray(items) || items.length === 0) {
-      const li = document.createElement('li');
-      li.textContent = 'No items yet.';
-      els.list.appendChild(li);
-      eventsCache = [];
-    } else {
-      eventsCache = Array.isArray(items) ? items : [];
-      for (const item of eventsCache) {
-        els.list.appendChild(renderItem(item));
-      }
-    }
-    showMessage(`Loaded ${items.length} item(s).`);
-
-    renderCalendar();
-  } catch (err) {
-    showMessage('Error loading items: ' + err.message, true);
-  }
-}
-
-async function handleAdd(e) {
-  e.preventDefault();
-
-  // Basic body using the generic fields.
-  const body = {
-    title: els.title.value.trim(),
-    description: els.description.value.trim(),
-    eventdate: els.eventdate.value.trim(),
-    eventtime: els.eventtime.value.trim(),
-    venueid: Number(els.venueid.value.trim())
-  };
-
-  // run client-side validation
-  const validation = validateEvent(body);
-  if (!validation.valid) {
-    showMessage('Validation error: ' + validation.errors.join(', '), true);
-    return;
-  }
-
-  try {
-    const res = await fetch(API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    });
-
-    if (res.status === 200 || res.status === 201) {
-      showMessage('Item added.');
-      els.form.reset();
-      await loadItems();
-      return;
-    }
-
-    if (res.status === 422) {
-      let errJson = {};
-      try {
-        errJson = await res.json();
-      } catch (_) { }
-      const details =
-        errJson?.error?.details?.join(', ') ||
-        errJson?.error?.message ||
-        'Invalid input';
-      showMessage('Validation error: ' + details, true);
-      return;
-    }
-
-    showMessage(`Unexpected status: ${res.status}`, true);
-  } catch (err) {
-    showMessage('Network error: ' + err.message, true);
-  }
-}
 
 //rendering calendar
 
@@ -368,106 +254,25 @@ function renderCalendar() {
   }
 }
 
+  prevBtn.addEventListener('click', () => {
+    date.setMonth(date.getMonth() - 1);
+    renderCalendar();
+  });
 
-prevBtn.addEventListener('click', () => {
-  date.setMonth(date.getMonth() - 1);
+  nextBtn.addEventListener('click', () => {
+    date.setMonth(date.getMonth() + 1);
+    renderCalendar();
+  });
+
   renderCalendar();
-});
 
-nextBtn.addEventListener('click', () => {
-  date.setMonth(date.getMonth() + 1);
-  renderCalendar();
-});
+  daysList.addEventListener('click', (e) => {
+    if (e.target.classList.contains('empty')) return;
+    const selected = daysList.querySelector('.selected');
 
-renderCalendar();
+    if (selected) selected.classList.remove('selected');
+    e.target.classList.add('selected');
 
-
-daysList.addEventListener('click', (e) => {
-  if (e.target.classList.contains('empty')) return;
-  const selected = daysList.querySelector('.selected');
-
-  if (selected) selected.classList.remove('selected');
-  e.target.classList.add('selected');
-
-  const day = Number(e.target.textContent);
-  date.setDate(day);
-});
-
-els.updateForm?.addEventListener('submit', async (e) => {
-  e.preventDefault();
-
-  let id = Number(els.updatedEventID.value);
-  const title = els.currentTitle.value.trim();
-
-  if (!id) {
-    if (!title) {
-      showMessage('You must select an event and provide a title', true);
-      return;
-    }
-    const matches = eventsCache.filter(ev => String(ev.title).trim() === title);
-    if (matches.length === 0) {
-      showMessage(`No event found with name "${title}"`, true);
-      return;
-    }
-    if (matches.length > 1) {
-      showMessage(`Multiple events found with name "${title}" — updating the first match.`);
-    }
-    id = matches[0].eventid;
-  }
-
-  const body = {
-    title: els.updatedTitle.value.trim(),
-    description: els.updatedDescription.value.trim(),
-    eventdate: els.updatedEventDate.value.trim(),
-    eventtime: els.updatedEventTime.value.trim(),
-    venueid: Number(els.updatedVenueID.value.trim())
-  };
-
-  try {
-    await updateEvent(id, body);
-    showMessage('Event updated.');
-    els.updateForm.reset();
-    await loadItems();
-  } catch (err) {
-    showMessage(err.message, true);
-  }
-});
-
-els.deleteForm?.addEventListener('submit', async (e) => {
-  e.preventDefault();
-
-  let id = Number(els.deletedEventID.value);
-  const title = els.deletedTitle.value.trim();
-
-  if (!id) {
-    if (!title) {
-      showMessage('You must select an event and provide a title', true);
-      return;
-    }
-    const matches = eventsCache.filter(ev => String(ev.title).trim() === title);
-    if (matches.length === 0) {
-      showMessage(`No event found with name "${title}"`, true);
-      return;
-    }
-    if (matches.length > 1) {
-      showMessage(`Multiple events found with name "${title}" — deleting the first match.`);
-    }
-    id = matches[0].eventid;
-  }
-
-  const body = {
-    title: els.deletedTitle.value.trim(),
-  };
-
-  try {
-    await deleteEvent(id, body);
-    showMessage('Event deleted.');
-    els.deleteForm.reset();
-    await loadItems();
-  } catch (err) {
-    showMessage(err.message, true);
-  }
-});
-
-
-
+    const day = Number(e.target.textContent);
+    date.setDate(day);
+  });

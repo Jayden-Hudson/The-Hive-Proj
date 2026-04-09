@@ -2,7 +2,6 @@ package dev.hive.eventrequest.controller;
 import dev.hive.eventrequest.entity.EventRequest;
 
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.*;
 
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;

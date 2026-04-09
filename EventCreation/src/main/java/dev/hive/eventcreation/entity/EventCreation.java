@@ -6,6 +6,9 @@ import java.time.LocalTime;
 
 public class EventCreation {
 
+    @JsonProperty("eventid")
+    private Integer eventid;
+
     private String title;
     private String description;
 
@@ -17,6 +20,10 @@ public class EventCreation {
 
     @JsonProperty("venueid")
     private Integer venueid;
+
+    public Integer getEventid() { return eventid; }
+
+    public void setEventid(Integer eventid) { this.eventid = eventid; }
 
     public String getTitle() {
         return title;
