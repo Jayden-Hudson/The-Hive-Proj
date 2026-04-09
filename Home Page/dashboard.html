@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+
+</head>
+
+<body>
+
+    <header>
+        <h1>Employee Dashboard</h1>
+        <nav class="navigation">
+
+            <a href="Edashboard.html">Overview</a>
+            <a href="employee.html">New Employee</a>
+            <a href="ECreation.html">Create Event</a>
+          
+
+            <a href="#" id="drawer">Reports</a>
+        </nav>
+    </header>
+
+
+
+    <!-- Ticket Information -->
+    <div id="overlay"></div>
+    <div class="drawer" id="reportDrawer">
+        <h2>Reports</h2>
+        <p>Total Tickets Sold: <span id="ticketsSold"></span></p>
+        <p>Tickets Available: <span id="ticketsAvailable"></span></p>
+
+    </div>
+
+
+
+    <!-- all the event request will be shown here -->
+    <section>
+        <h3>Event request list</h3>
+         <div id="eventrequestList"></div>
+    </section>
+    
+
+
+</body>
+
+<Script>
+
+
+    const drawerBtn = document.getElementById("drawer");
+    const drawer = document.getElementById("reportDrawer");
+    const overlay = document.getElementById("overlay");
+
+    drawerBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        drawer.classList.add("open");
+        overlay.classList.add("active");
+    });
+
+    overlay.addEventListener("click", function () {
+        drawer.classList.remove("open");
+        overlay.classList.remove("active");
+    });
+
+</Script>
+
+</html>
