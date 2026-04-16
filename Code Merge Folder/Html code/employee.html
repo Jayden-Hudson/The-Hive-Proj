@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Home.css">
+    <title>New Employee</title>
+</head>
+<body>
+
+
+    <header>
+        <h1>Goldenfield Venue</h1>
+        <nav>
+            <ul>
+                <li><a href="Home.html">Home</a></li>
+                <li><a href="TicketProcess.html">Get Tickets</a></li>
+                <li><a href="EventRequest.html">Request Event</a></li>
+                <li><a href="ECreation.html">Create Event</a></li>
+                <li><a href="Calendar.html">Calendar</a></li>
+                <li><a href="employee.html">Employee</a></li>
+                <li><a href="SignIn.html">Sign In</a></li>
+                <li><a href="SignUp.html">Sign Up</a></li>
+                <li><a href="EmployeeSignIn.html">Employee Sign In</a></li>
+            </ul>
+        </nav>
+    </header>    
+
+<main>
+<h1>New Employee</h1>
+
+<form id="employeeForm">
+    <label for="firstname">First Name</label>
+    <input id="firstname" name="firstname" placeholder="First Name" required><br>
+
+    <label for="lastname">Last Name</label>
+    <input id="lastname" name="lastname" placeholder="Last Name" required><br>
+
+    <label for="dob">Date of Birth</label>
+    <input type="date" id="dob" name="dob" required><br>
+
+    <label for="address">Address</label>
+    <input id="address" name="address" placeholder="Address" required><br>
+
+    <label for="zipcode">Zip Code</label>
+    <input id="zipcode" name="zipcode" placeholder="Zip Code" required><br>
+
+    <label for="city">City</label>
+    <input id="city" name="city" placeholder="City" required><br>
+
+    <label for="state">State</label>
+    <input id="state" name="state" placeholder="State" required><br>
+
+    <label for="salary">Salary</label>
+    <input id="salary" name="salary" placeholder="Salary" type="number" required><br>
+
+    <label for="wagerate">Wage Rate</label>
+    <input id="wagerate" name="wagerate" placeholder="Wage Rate" type="number" step="0.01" required><br>
+
+    <label for="hiredate">Hire Date</label>
+    <input type="date" id="hiredate" name="hiredate" required><br>
+
+    <label for="releaseddate">Released Date</label>
+    <input type="date" id="releaseddate" name="releaseddate"><br>
+
+    <label for="password">Password</label>
+    <input id="password" type="password" name="password" placeholder="Password" required><br>
+
+    <label for="department">Department</label>
+    <select id="department">
+        <option value="">Select Department</option>
+        <option value="1" data-name="HR">HR</option>
+        <option value="2" data-name="Accounting">Accounting</option>
+        <option value="3" data-name="Manager">Manager</option>
+        <option value="4" data-name="Staff">Staff</option>
+    </select><br>
+
+    <label for="managerid">Select Manager</label>
+    <select name="Managerid" id="managerid">
+        <option value="">Select Manager</option>
+        <option value="1">John Smith</option>
+        <option value="2">Jane Doe</option>
+    </select><br><br>
+
+    <div id="message"></div>
+    <div class="btn-field">
+        <button type="button" id="Create">Create</button>
+    </div>
+</form>
+
+</main>
+
+<script src="employee.js"></script>
+</body>
+</html>
