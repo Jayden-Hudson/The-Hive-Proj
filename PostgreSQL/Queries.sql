@@ -341,3 +341,62 @@ CREATE TABLE scanner (
         FOREIGN KEY (ticketid) REFERENCES ticket(ticketid)
 );
 
+-- Parking Lot
+
+CREATE TABLE parking_lot (
+    lotid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    lotname VARCHAR(100) NOT NULL,
+    locationdescription VARCHAR(255),
+    maxcapacity INT NOT NULL CHECK (maxcapacity >= 0),
+    covered BOOLEAN NOT NULL DEFAULT FALSE,
+    securitylevel VARCHAR(50),
+    notes TEXT
+);
+
+-- Each spot belongs to one parking lot
+CREATE TABLE parking_spot (
+    spotid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    lotid INT NOT NULL,
+    spotnumber VARCHAR(20) NOT NULL,
+    spottype VARCHAR(30) NOT NULL DEFAULT 'Regular',
+    isavailable BOOLEAN NOT NULL DEFAULT TRUE,
+    isreserved BOOLEAN NOT NULL DEFAULT FALSE,
+    hascharger BOOLEAN NOT NULL DEFAULT FALSE,
+
+    CONSTRAINT fk_parking_spot_lot
+        FOREIGN KEY (lotid) REFERENCES parking_lot(lotid)
+        ON DELETE CASCADE,
+
+    CONSTRAINT chk_spottype
+        CHECK (spottype IN ('Regular', 'Accessible', 'VIP', 'Employee', 'Bus', 'Electric')),
+
+    CONSTRAINT uq_lot_spotnumber
+        UNIQUE (lotid, spotnumber)
+);
+
+-- A bus can be assigned to a parking lot and optionally a parking spot
+CREATE TABLE venue_bus (
+    busid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    busnumber VARCHAR(30) NOT NULL UNIQUE,
+    driverfirstname VARCHAR(100),
+    driverlastname VARCHAR(100),
+    licenseplate VARCHAR(20) NOT NULL UNIQUE,
+    capacity INT NOT NULL CHECK (capacity > 0),
+    busstatus VARCHAR(30) NOT NULL DEFAULT 'Active',
+    lotid INT,
+    assignedspotid INT,
+    arrivaltime TIMESTAMP,
+    departuretime TIMESTAMP,
+    notes TEXT,
+
+    CONSTRAINT fk_venue_bus_lot
+        FOREIGN KEY (lotid) REFERENCES parking_lot(lotid)
+        ON DELETE SET NULL,
+
+    CONSTRAINT fk_venue_bus_spot
+        FOREIGN KEY (assignedspotid) REFERENCES parking_spot(spotid)
+        ON DELETE SET NULL,
+
+    CONSTRAINT chk_busstatus
+        CHECK (busstatus IN ('Active', 'Out of Service', 'Reserved', 'Parked'))
+);
