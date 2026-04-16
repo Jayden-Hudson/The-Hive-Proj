@@ -43,9 +43,10 @@ const closeSlide = document.getElementById('closeSlide'); //using?
 const ticketDiv = document.getElementById("ticketDiv"); //using?
 
 //show details
+
 const showPerformers = document.getElementById('showPerformers');
-const showDateTime = document.getElementById('showDateTime');
-const showAgesAllowed = document.getElementById('showDateTime');
+const showDay = document.getElementById('showDay');
+const showHour = document.getElementById('showHour');
 
 //CHECKOUT
 const checkoutEmail = document.getElementById('checkoutEmail');

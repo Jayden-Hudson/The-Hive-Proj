@@ -1,4 +1,6 @@
 let selectedShow = null;
+let selectedShowTime = null;
+let selectedShowDate = null;
 
 const els = {
   daysList: document.getElementById('days'),
@@ -57,7 +59,6 @@ const months = [
 
 function renderItemFull(item) {
   const el = document.createElement('div');
-  //el.style.background = blue;
   const viewShowButton = document.createElement('button');
 
   viewShowButton.innerHTML = 'View Tickets';
@@ -69,7 +70,8 @@ function renderItemFull(item) {
    ${item.eventtime || ''},
    ${item.venueid || ''}
  `;
-  /*el.innerHTML = `
+
+  /* el.innerHTML = `
     <strong>${item.title || ''}</strong><br>
     Description: ${item.description || ''}<br>
     Event Time: ${item.eventtime || ''}<br>
@@ -77,20 +79,22 @@ function renderItemFull(item) {
   `; */
 
   viewShowButton.addEventListener('click', () => {
-      viewSelectedShow(item.title);
+      viewSelectedShow(item.title, item.eventtime, item.eventdate);
   });
 
   el.appendChild(viewShowButton);
   return el;
 }
 
-function viewSelectedShow(show) {
+function viewSelectedShow(show, time, date) {
+    selectedShowTime = time;
     selectedShow = show;
-    window.location.href = "/projA/checkout.html";
-/*
-      const encodedShow = encodeURIComponent(selectedShow);
-        // Redirect to Module 2's page with query parameter
-        window.location.href = http://localhost:8080/checkout.html?data=${encodedShow}`; */
+    selectedShowDate = date;
+    let encodedShow = encodeURIComponent(show);
+    let encodedTime = encodeURIComponent(time);
+    let encodedDate = encodeURIComponent(date);
+
+    window.location.href = `/projA/checkout.html?show=${encodedShow}&time=${encodedTime}&date=${encodedDate}`;
     console.log(show + " clicked!");
 }
 
@@ -121,6 +125,7 @@ function renderCalendar() {
     dayNumber.textContent = day.toString();
     cell.appendChild(dayNumber);
 
+
     const iso = `${year}-${pad(month + 1)}-${pad(day)}`;
     const dayEvents = eventsCache.filter(event => event.eventdate.split('T')[0] === iso);
 
@@ -133,6 +138,7 @@ function renderCalendar() {
       }
       cell.appendChild(container);
     }
+
 
     daysList.appendChild(cell);
   }

@@ -4,6 +4,38 @@ let currentSection = null;
 let cartItems = [];
 let currentRow = null;
 
+//GET NAME OF ARTIST BEING VIEWED
+function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+}
+
+window.onload = function() {
+    const artistName = getQueryParam('show');
+    const showTime = getQueryParam('time');
+    const showDate = getQueryParam('date');
+    if (artistName) {
+    console.log(artistName, showTime, showDate);
+    displayShowInfo(artistName, showTime, showDate);
+        //document.getElementById('artistName').textContent = decodeURIComponent(artistName);
+        // Here you could fetch ticket data from your database using artistName
+    } else {
+    console.long('unknown artist');
+        //document.getElementById('artistName').textContent = "Unknown Artist";
+    }
+};
+
+
+function displayShowInfo(artistName, showTime, showDate) {
+   // const showPerformers = document.getElementById('showPerformers');
+   // const showDateTime = document.getElementById('showDateTime');
+  //  const showAgesAllowed = document.getElementById('showDateTime');
+    showPerformers.textContent = artistName;
+    showDay.textContent = showDate;
+    showHour.textContent = showTime;
+
+}
+
 ticketSelect.addEventListener('change', () => {
     ticketSelection = ticketSelect.value;
     if (currentSection !== null) {

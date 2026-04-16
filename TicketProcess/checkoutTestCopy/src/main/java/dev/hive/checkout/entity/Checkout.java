@@ -33,6 +33,7 @@ public class Checkout {
     private int section;
     private int row;
     private int tickets;
+    private String ticketEvent;
 
     public int getTickets() {
         return tickets;
@@ -209,6 +210,14 @@ public class Checkout {
 
     public void setOrderDate(String orderDate) {
         this.orderDate = orderDate;
+    }
+
+    public String getTicketEvent() {
+        return ticketEvent;
+    }
+
+    public void setTicketEvent(String ticketEvent) {
+        this.ticketEvent = ticketEvent;
     }
 
     public static class EventCreation {

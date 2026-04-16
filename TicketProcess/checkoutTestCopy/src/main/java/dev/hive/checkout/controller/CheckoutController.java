@@ -7,8 +7,12 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Optional;
 
 @RestController
 public class CheckoutController {
@@ -25,9 +29,9 @@ public class CheckoutController {
     public String addCheckoutData(@RequestBody Checkout checkout) {
         //for testing: compared getter value to console value to db value
         System.out.println("Received data for checkout order# " + checkout.getConfirmationNumber());
+        System.out.println("Tickets for " + checkout.getTicketEvent());
 
         try {
-
             /*/////////////////////////////// #1 - insert into buyer //////////////////////////////*/
             KeyHolder buyerKeyHolder = new GeneratedKeyHolder();
 
@@ -94,6 +98,30 @@ public class CheckoutController {
                 return ps;
             });
 
+            /* //////////////////////
+            Get the event (eventid) user bought tickets for(DONE)
+            Use this to complete the NEXT steps (NOT DONE)
+            ////////////////////// */
+            // NEXT: update rowsByEvent table (subtract number of tickets purchased from the corresponding row for that event(& track sold out status)
+            // NEXT: if user bought a parking pass, add row to parkingPass table for that order
+            // NEXT: update parkingByEvent table (subtract a pass from the number of passes left(& track sold out status)
+            String getEventSql = """ 
+                    SELECT eventid FROM public.event WHERE title = ? 
+                    """;
+            Optional<?> idOfEvent = jdbcTemplate.query(getEventSql, new Object[]{checkout.getTicketEvent()}, rs -> {
+                if (rs.next()) {
+                    return Optional.of(rs.getInt("eventid"));
+                }
+                return Optional.empty();
+            });
+            if (idOfEvent.isPresent()) {
+                System.out.println( "Event ID: " + idOfEvent.get());
+              //  return "Event ID: " + idOfEvent.get();
+            } else {
+                System.out.println( "Event ID: not found");
+               // return "No event found for title: " + checkout.getTicketEvent();
+            }
+            
             System.out.println("Buyer rows inserted: " + buyerRows);
             System.out.println("Card info rows inserted: " + cardInfoRows);
             System.out.println("Order rows inserted: " + orderRows);

@@ -4,6 +4,7 @@ placeOrderButton.addEventListener('click', () => {
     
     let confirmationNum = generateConfirmationNumber();
     let orderDate = getFormattedDate();
+    let ticketsFor = showPerformers.textContent;
 
     //dont need confirm email   
     //see buyer for slide one, see cardinfo for slide two
@@ -29,7 +30,8 @@ placeOrderButton.addEventListener('click', () => {
             orderDate: orderDate,
             section: currentSection,
             row: currentRow,
-            tickets: ticketSelect.value
+            tickets: ticketSelect.value,
+            ticketEvent: ticketsFor
         }
         
         console.log(checkoutData);
