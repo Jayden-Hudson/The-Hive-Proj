@@ -108,13 +108,13 @@ function renderCalendar() {
 
   renderCalendar();
 
-  daysList.addEventListener('click', (e) => {
-    if (e.target.classList.contains('empty')) return;
-    const selected = daysList.querySelector('.selected');
+   daysList.addEventListener('click', (e) => {
+  const eventEl = e.target.closest('.eventSmall');
 
-    if (selected) selected.classList.remove('selected');
-    e.target.classList.add('selected');
+    if (!eventEl || !daysList.contains(eventEl)) return;
 
-    const day = Number(e.target.textContent);
-    date.setDate(day);
+  const selected = daysList.querySelector('.selected');
+  if (selected) selected.classList.remove('selected');
+
+  eventEl.classList.add('selected'); 
   });

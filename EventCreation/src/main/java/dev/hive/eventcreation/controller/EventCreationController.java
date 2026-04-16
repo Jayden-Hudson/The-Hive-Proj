@@ -31,6 +31,14 @@ public class EventCreationController {
         System.out.println("Received event request for " + event.getTitle());
 
         try {
+
+            // Check if day already has an event
+            String existsSql = "SELECT COUNT(*) FROM public.event WHERE eventdate = ?";
+            Integer existing = jdbcTemplate.queryForObject(existsSql, Integer.class, event.getEventDate());
+            if (existing != null && existing > 0) {
+                return "There is already an event on that date. Only one event per day is allowed";
+            }
+
             KeyHolder keyHolder = new GeneratedKeyHolder();
 
             String eventSql = """
@@ -69,8 +77,8 @@ public class EventCreationController {
     @GetMapping("/api/events")
     public List<EventCreation> getAllEvents() {
         String selectSql = """
-            SELECT * FROM public.event
-            """;
+                SELECT * FROM public.event
+                """;
 
         return jdbcTemplate.query(selectSql, (rs, rowNum) -> {
             EventCreation event = new EventCreation();
@@ -84,6 +92,27 @@ public class EventCreationController {
         });
     }
 
-}
+    @GetMapping("/api/events/{id}")
+    public EventCreation getEventById(@PathVariable int id) {
+        String sql = """
+                SELECT * FROM public.event WHERE eventid = ?
+                """;
 
+        try {
+            return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
+                EventCreation event = new EventCreation();
+                event.setEventid(rs.getInt("eventid"));
+                event.setTitle(rs.getString("title"));
+                event.setDescription(rs.getString("description"));
+                event.setEventDate(rs.getObject("eventdate", java.time.LocalDate.class));
+                event.setEventTime(rs.getObject("eventtime", java.time.LocalTime.class));
+                event.setVenueid(rs.getInt("venueid"));
+                return event;
+            }, id);
 
+        } catch (Exception e) {
+            throw new RuntimeException("Event not found with id: " + id);
+        }
+    }
+
+};
