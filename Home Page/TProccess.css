@@ -8,11 +8,29 @@
 body {
     font-family: Arial, sans-serif;
     background:#f4f4f4;
-   /* text-align: center; */
     display: flex; 
-   /* justify-content: center; */
+    flex-direction: column;
+    min-height: 100vh;
 }
 
+header {
+  width: 100%;
+  background-color: var(--base);
+  padding: 20px;
+  text-align: center;
+}
+
+main {
+  width: 100%;
+  flex: 1; /* Take up remaining space */
+}
+
+#columnContainer {
+    display: flex;
+   /* Make the container take the full viewport height */
+    width: 100%;
+    min-height: calc(100vh - 140px); /* Adjust for header height */
+}
 /* MINEEEEEEE
 .ticket {
 
@@ -714,13 +732,13 @@ nav {
 
 nav ul {
     list-style: none;
-    margin: 0 auto;
+    margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 2ppx 40px;
-    max-width: 400px;
+    gap: 20px;
+    max-width: none;
 }
 
 nav ul li {

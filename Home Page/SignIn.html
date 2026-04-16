@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Goldenfield Venue - Home</title>
+    <title>Goldenfield Venue - Sign In</title>
     <link rel="stylesheet" href="Home.css" />
     <link rel="stylesheet" href="navbar.css" />
 </head>
@@ -24,29 +24,33 @@
     </header>
 
     <main>
+        <section class="button-section">
+            <h2>Sign In</h2>
+            <p>Access your Goldenfield Venue account</p>
 
-        <section class="calendar-section">
-            <div class="calendar">
-                <div id="month-year"></div>
+            <form action="#" method="post">
+                <p>
+                    <label for="email">Email</label><br>
+                    <input type="email" id="email" name="email" required>
+                </p>
 
-                    </button>
-                </div>
+                <p>
+                    <label for="password">Password</label><br>
+                    <input type="password" id="password" name="password" required>
+                </p>
 
-                <div class="weekdays">
-                    <div title="Sunday">Sun</div>
-                    <div title="Monday">Mon</div>
-                    <div title="Tuesday">Tue</div>
-                    <div title="Wednesday">Wed</div>
-                    <div title="Thursday">Thu</div>
-                    <div title="Friday">Fri</div>
-                    <div title="Saturday">Sat</div>
-                </div>
+                <p>
+                    <button type="submit" class="button">Sign In</button>
+                </p>
 
-                <div id="days"></div>
-            </div>
+                <p>
+                    Don't have an account?
+                    <a href="SignUp.html">Create one here</a>
+                </p>
+            </form>
         </section>
     </main>
-    <script src="Home.js"></script>
+
     <script src="navbar.js"></script>
 </body>
 </html>
