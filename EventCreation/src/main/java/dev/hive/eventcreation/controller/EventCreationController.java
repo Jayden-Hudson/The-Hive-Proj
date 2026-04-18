@@ -115,4 +115,20 @@ public class EventCreationController {
         }
     }
 
-};
+    @PutMapping("/api/events/{id}")
+    public String updateEvent(@PathVariable int id, @RequestBody EventCreation event) {
+        String sql = """
+                UPDATE public.event
+                SET title = ?, description = ?, eventdate = ?, eventtime = ?, venueid = ?
+                WHERE eventid = ?
+                """;
+
+        int rowsAffected = jdbcTemplate.update(sql, event.getTitle(), event.getDescription(), event.getEventDate(), event.getEventTime(), event.getVenueid(), id);
+
+        if (rowsAffected > 0) {
+            return "Event updated successfully";
+        } else {
+            return "Update failed for id: " + id;
+        }
+    }
+}

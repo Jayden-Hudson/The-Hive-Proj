@@ -1,15 +1,15 @@
 const els = {
   daysList: document.getElementById('days'),
   monthYear: document.getElementById('month-year'),
-  prevBtn: document.getElementById('previous-month'),
-  nextBtn: document.getElementById('next-month'),
+  prevMonthBtn: document.getElementById('previous-month'),
+  nextMonthBtn: document.getElementById('next-month'),
   list: document.getElementById('eventList'),
 };
 
 const daysList = els.daysList;
 const monthYear = els.monthYear;
-const prevBtn = els.prevBtn;
-const nextBtn = els.nextBtn;
+const prevMonthBtn = els.prevMonthBtn;
+const nextMonthBtn = els.nextMonthBtn;
 
 let eventsCache = [];
 function pad(n) { return n < 10 ? '0' + n : String(n); }
@@ -103,18 +103,8 @@ function renderCalendar() {
     }
 
     daysList.appendChild(cell);
-  }
+  } 
+
 }
 
-  renderCalendar();
-
-   daysList.addEventListener('click', (e) => {
-  const eventEl = e.target.closest('.eventSmall');
-
-    if (!eventEl || !daysList.contains(eventEl)) return;
-
-  const selected = daysList.querySelector('.selected');
-  if (selected) selected.classList.remove('selected');
-
-  eventEl.classList.add('selected'); 
-  });
+ 
