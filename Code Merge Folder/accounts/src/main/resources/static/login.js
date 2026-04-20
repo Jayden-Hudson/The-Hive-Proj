@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8080/api";
+const API_URL = "http://localhost:8080/api/account";
 
 const usernameInput = document.getElementById("username");
 const passwordInput = document.getElementById("password");
