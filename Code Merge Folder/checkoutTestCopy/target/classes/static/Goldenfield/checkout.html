@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="">
+    <head>
+        <title>Get Tickets!</title>
+        <link rel="stylesheet" type="text/css" href="checkoutStyle.css">
+    </head>
+    <body>
+        <div id="columnContainer">
+            <div id="leftColumn">
+                <div id="ticketDiv">
+                    <div id="showInfo">
+                        <div class="showDetails">    
+                            <p id="showPerformers">Rainbow Kitten Suprise</p>
+                        </div>
+                        <div class="showDetails">
+                            <p id="showDay">Saturay May 14th, 8:00 PM</p>
+                        </div>
+                        <div class="showDetails"> 
+                            <p id="showHour">Ages 18+</p>
+                        </div>
+                    </div>
+                    <div id="centerContent">
+                        <select id="ticketSelect">
+                            <option value="1">1 Ticket</option>
+                            <option value="2">2 Tickets</option>
+                            <option value="3">3 Tickets</option>
+                            <option value="4">4 Tickets</option>
+                            <option value="5">5 Tickets</option>
+                            <option value="6">6 Tickets</option>
+                            <option value="7">7 Tickets</option>
+                            <option value="8">8 Tickets</option>
+                            <option value="9">9 Tickets</option>
+                            <option value="10">10 Tickets (max quantity per order)</option>
+                        </select>
+                        <button id="ticketsButton">View Tickets</button>
+                    </div>
+                </div>
+                <div id="listings">
+                    <!--
+                    <div class="ticket">
+                        <div class="ticketInfoDiv">
+                            <p class="ticketSection">GA PIT</p>
+                            <p class="ticketRow">2 Tickets</p>
+                        </div>
+                        <button class="selectTicketsButton">Select</button>
+                    </div>
+                    <div class="ticket">
+                        <div class="ticketInfoDiv">
+                            <p class="ticketSection">A1</p>
+                            <p class="ticketRow">Row A12 | 2 Tickets</p>
+                        </div>
+                        <button class="selectTicketsButton">Select</button>
+                    </div>
+                    <div class="ticket">
+                        <div class="ticketInfoDiv">
+                            <p class="ticketSection">D1</p>
+                            <p class="ticketRow">Row D33 | 2 Tickets</p>
+                        </div>
+                        <button class="selectTicketsButton" >Select</button>
+                    </div>
+                    -->
+                </div>
+            </div>
+            <!--leftCol-->
+            <div id="rightColumn">
+                <div class="venueMap">
+                    <div class="stage">STAGE</div>
+                    <div class="sectionA1 section" id="section1">1</div>
+                    <div class="sectionGA section" id="section8">GA PIT</div>
+                    <div class="sectionA2 section" id='section2'>2</div>
+                    <div class="sectionB1 section" id="section3">3</div>
+                    <div class="sectionB2 section" id="section4">4</div>
+                    <div class="specialGridRow">
+                        <div class="sectionC1 section" id="section5">5</div>
+                        <div class="sectionD1 section" id="section6">6</div>
+                        <div class="sectionC2 section" id="section7">7</div>
+                    </div> 
+                </div>
+            </div> <!--right column-->
+           
+        </div> <!--column container-->
+        <div id="timer"></div>
+
+        <div class="checkoutOverlay" id="checkoutOverlay"> 
+            <div class="slider-container">
+                <button id="closeSlide">&times;</button>
+                <div class="slide-wrapper">
+                    <!--------SLIDE #1--------->
+                    <div class="slide" id="slide1">
+                        <div class="headerContainer">
+                            <div id="circle">1</div>
+                            <p class="header">Guest Checkout</p>
+                        </div>
+                        <p class="slideText" id="slide1TextHeader">To which email address are we sending tickets to?</p>
+                        <form>
+                            <label for="checkoutEmail">Email Address*</label>
+                            <input type="text" class="slide1input" id="checkoutEmail">
+                            <div class="spanDiv">
+                                <span id="checkoutEmailMessage"></span>
+                            </div>
+                            <label for="confirmEmail" id="confirmEmailLabel">Please confirm your email address*</label>
+                            <input type="text" class="slide1input" id="confirmEmail">
+                            <div class="spanDiv">
+                                <span id="confirmEmailMessage"></span>
+                            </div>
+                            <div id="firstLastPhoneDiv">
+                                <div class="inline" id="firstInline">
+                                    <label for="firstName">First Name*</label>
+                                    <input type="text" class="slide1input" id="firstName"> 
+                                </div>
+                                <div class="inline" id="lastInline">
+                                    <label for="lastName" id="lastNameLabel">Last Name*</label>
+                                    <input type="text" class="slide1input" id="lastName"> 
+                                </div>
+                                <label for="phone" id="phoneLabel">Phone*</label>
+                                <input type="text" class="slide1input" id="phone">
+                                <div class="spanDiv">
+                                    <span id="phoneMessage"></span>
+                                </div>
+<!--------------------------------------------------------->
+                                <div id="missingFields">
+                                    <span>*Fields Required</span>
+                                </div>
+<!--------------------------------------------------------->
+                            </div>
+                        </form>
+                    </div>
+                    <!--------END SLIDE #1--------->
+                     <!-------- SLIDE #2--------->
+                    <div class="slide" id="slide2">
+                        <div class="headerContainer">
+                            <div id="circle">2</div>
+                            <p class="header">Billing & Payment Details</p>
+                        </div>
+                        <form>
+                        <div class="inline" id="adressInline">
+                            <label for="address">Billing Address*</label>
+                            <input type="text" class="slide2input" id="address">
+                        </div>
+                        <div class="inline" id="cityInline">
+                            <label for="city">City*</label>
+                            <input type="text" class="slide2input" id="city"> 
+                        </div>
+    <!--state one--><div id="z">
+                        <div class="inline" id="stateInline">
+                            <label for="state">State*</label>
+                            <select name="state" class="slide2select" id="state">
+                                <option value="" selected disabled hidden>Select state</option>
+                                <option value="AK">AK</option>
+                                <option value="AL">AL</option>
+                                <option value="AR">AR</option>
+                                <option value="AZ">AZ</option>
+                                <option value="CA">CA</option>
+                                <option value="CO">CO</option>
+                                <option value="CT">CT</option>
+                                <option value="DC">DC</option>
+                                <option value="DE">DE</option>
+                                <option value="FL">FL</option>
+                                <option value="GA">GA</option>
+                                <option value="HI">HI</option>
+                                <option value="IA">IA</option>
+                                <option value="ID">ID</option>
+                                <option value="IL">IL</option>
+                                <option value="IN">IN</option>
+                                <option value="KS">KS</option>
+                                <option value="KY">KY</option>
+                                <option value="LA">LA</option>
+                                <option value="MA">MA</option>
+                                <option value="MD">MD</option>
+                                <option value="ME">ME</option>
+                                <option value="MI">MI</option>
+                                <option value="MN">MN</option>
+                                <option value="MO">MO</option>
+                                <option value="MS">MS</option>
+                                <option value="MT">MT</option>
+                                <option value="NC">NC</option>
+                                <option value="ND">ND</option>
+                                <option value="NE">NE</option>
+                                <option value="NH">NH</option>
+                                <option value="NJ">NJ</option>
+                                <option value="NM">NM</option>
+                                <option value="NV">NV</option>
+                                <option value="NY">NY</option>
+                                <option value="OH">OH</option>
+                                <option value="OK">OK</option>
+                                <option value="OR">OR</option>
+                                <option value="PA">PA</option>
+                                <option value="RI">RI</option>
+                                <option value="SC">SC</option>
+                                <option value="SD">SD</option>
+                                <option value="TN">TN</option>
+                                <option value="TX">TX</option>
+                                <option value="UT">UT</option>
+                                <option value="VA">VA</option>
+                                <option value="VT">VT</option>
+                                <option value="WA">WA</option>
+                                <option value="WI">WI</option>
+                                <option value="WV">WV</option>
+                                <option value="WY">WY</option>
+                            </select>
+                            <div class="spanDiv" id="stateSpanDiv">
+                                <span id="stateMessage">-</span>
+                            </div>
+                            </div>
+                            <div class="inline" id="zipInline">
+                                <label for="zip">Zip Code*</label>
+                                <input type="text" class="slide2input" id="zip">
+                                <div class="spanDiv">
+                                    <span id="zipMessage"></span>
+                                </div>
+                            </div>
+    <!--state one--></div>
+                            
+                       <!-- <label>Event Ticket Protection*</label> -->
+                       <!-- <button class="previousButton" onclick="prevSlide()">Previous</button> -->
+                         
+                        <p id="cardInformation">Credit or Debit Card &#x1F4B3</p>
+                        <label for="cardNumber">Card Number*</label>
+                        <input type="text" class="slide2input" id="cardNumber">
+                        <div class="spanDiv">
+                            <span id="cardNumberMessage"></span>
+                        </div>
+        <div id="r"><!--this one!!-->
+                        <div class="inline" id="expirationMonthInline"> 
+                            <label for="expirationMonth">Expiration</label>
+                            <select name="month" class="slide2select" id="expirationMonth">
+                                <option value="" disabled selected hidden>Month</option>
+                                <option value="1">01</option>
+                                <option value="2">02</option>
+                                <option value="3">03</option>
+                                <option value="4">04</option>
+                                <option value="5">05</option>
+                                <option value="6">06</option>
+                                <option value="7">07</option>
+                                <option value="8">08</option>
+                                <option value="9">09</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                            </select>
+                            <div class="spanDiv" id="expMonthSpanDiv">
+                                <span id="expMonthMessage">-</span>
+                            </div>
+                        </div>
+                        <div class="inline" id="expirationYearInline">
+                            <label for="expirationYear">Date*</label>
+                            <select name="year" class="slide2select" id="expirationYear">
+                                <option value="" hidden disabled selected>Year</option>
+                                <option value="2026">2026</option>
+                                <option value="2027">2027</option>
+                                <option value="2028">2028</option>
+                                <option value="2029">2029</option>
+                                <option value="2030">2030</option>
+                                <option value="2031">2031</option>
+                                <option value="2032">2032</option>
+                                <option value="2033">2033</option>
+                                <option value="2034">2034</option>
+                                <option value="2035">2035</option>
+                                <option value="2036">2036</option>
+                                <option value="2037">2037</option>
+                                <option value="2038">2038</option>
+                                <option value="2039">2039</option>
+                                <option value="2040">2040</option>
+                                <option value="2041">2041</option>
+                                <option value="2042">2042</option>
+                                <option value="2043">2043</option>
+                                <option value="2044">2044</option>
+                                <option value="2045">2045</option>
+                                <option value="2046">2046</option>
+                            </select>
+                            <div class="spanDiv" id="expYearSpanDiv">
+                                <span id="expYearMessage">-</span>
+                            </div>
+                        </div> 
+                        <!---
+                        <div class="spanDiv">
+                            <span class="placeholder"></span>
+                        </div>-->
+                        <div class="inline" id="cvvInline">
+                            <label for="cvv">CVV*</label>
+                            <input type="text" class="slide2input" id="cvv">
+                        
+                            <div class="spanDiv">
+                                <span id="cvvMessage"></span>
+                            </div>
+                        </div>
+        </div> <!--this once-->
+                        </form>
+                    </div>
+                     <!--------END SLIDE #2--------->
+                      <!--------SLIDE #3--------->
+                    <div class="slide" id="slide3">
+                        <div class="headerContainer">
+                            <div id="circle">3</div>
+                            <p class="header">Review Order</p>
+                        </div>
+                        <div id="parkingPassDiv">
+                        <p class="additions">Parking Pass*</p>
+                        <p class="parking">Public on-site parking is not allowed. A limited number of on-site parking
+                            passes are available for purchase. Purchased parking passes are accessible in the email containing your tickets.
+                            Only one non-refundable, non-reusable pass is included with purchase.   
+                        </p>
+                        <div class="checkBoxDiv">
+                            <input type=checkbox id="addPass" value="7.75"/>
+                            <label for="addPass" class="parking">Add a parking pass to my order (+$7.75)</label>
+                        </div>
+                        <div class="checkBoxDiv">
+                            <input type=checkbox id="declinePass" value="0" checked/>
+                            <label for="declinePass" class="parking">Do not add a parking pass to my order</label>
+                        </div>
+                        </div>
+                        <div id="ticketProtectionDiv">
+                        <p class="additions">Event Ticket Protection*</p>
+                        <p class="parking">Get reimbursed up to 100% of your ticket price if you can't 
+                           attend an event due to a covered reason - such as a covered illness, traffic accident, 
+                           weather emergency, and more.
+                        </p>
+                        <div class="checkBoxDiv">
+                            <input type=checkbox id="addProtection" value="10.95"/>
+                            <label for="addProtection" class="parking">Protect my ticket purchase (+$10.95 per ticket)</label>
+                        </div>
+                        <div class="checkBoxDiv">
+                            <input type=checkbox id="declineProtection" value="0" checked/>
+                            <label for="declineProtection" class="parking">Do not protect my ticket purchase</label>
+                        </div>
+                        </div>
+                        <div id="orderPricing">
+                            <label class="left" for="ticketPrice">All-in Ticket Price</label>
+                            <label class="right" id="ticketPrice"></label></br>
+                            <label class="left" for="salesTax">Sales Tax</label>
+                            <label class="right" id="salesTax"></label></br>
+                            <label class="left" for="parkingPrice">Parking Pass</label>
+                            <label class="right" id="parkingPrice"></label></br>
+                            <label class="left" for="protectionPrice">Event Ticket Prevention</label>
+                            <label class="right" id="protectionPrice"></label></br>
+                            <label class="left" for="orderTotal">Order Total</label>
+                            <label class="right" id="orderTotal"></label>
+                        </div>
+                        <!--Promo/Gift code?-->
+                        <div id="placeOrderDiv">
+                            <button id="placeOrderButton">Place Order</button>
+                        </div>
+                    </div>                    
+                </div>             
+            </div>
+        </div>
+
+        <div id="buttonDiv">
+            <div id="backButtonOverlay">
+                <button class="hide" id="previousSlideButton">Back</button>
+            </div>
+            <div id="nextButtonOverlay">
+                <button class="hide" id="nextSlideButton">Next</button>
+            </div>
+            <!--<button class="hide" id="previousSlideButton" onclick="prevSlide()">Back</button>
+            <button class="hide" id="nextSlideButton" onclick="nextSlide()">Next</button>-->
+        </div>
+        <div id="exitCartDiv">
+            <p>You'll lose your tickets and cart data if you exit the cart. Do you wish to proceed?</p>
+            <div id="exitCartButtons">
+                <button id="stayInCart">Stay in Cart</button>
+                <button id="leaveCart">Leave Cart</button>
+            </div>
+       </div>
+        <div id="timesUpOverlay">
+            <div id="timesUpDiv">
+                <h3 id="timesUpHeader">Time’s Up!</h3>
+                <p id="timesUpText">These tickets may have sold. Refresh to see the latest ticket inventory.</p></br>
+                <button id="refreshButton">Refresh</button>
+            </div>
+        </div>
+        <div id="popUp" class="popUp">pop-up!</div>
+        <script src="checkoutScript.js"></script>
+        <script src="checkoutValidation.js"></script>
+        <script src="checkoutRoutes.js"></script>
+        <script src="checkoutTicketSelection.js"></script>
+        <script src="CalScript.js"></script>
+    </body>
+</html>
+
+<!--
+      <div id="timer"></div>
+      <div class="venueMap">
+          <div class="stage">STAGE</div>
+          <div class="sectionA1 section">A1</div>
+          <div class="sectionGA section">GA PIT</div>
+          <div class="sectionA2 section">A2</div>
+          <div class="sectionB1 section">B1</div>
+          <div class="sectionB2 section">B2</div>
+          <div class="specialGridRow">
+              <div class="sectionC1 section">C1</div>
+              <div class="sectionD1 section">D1</div>
+              <div class="sectionC2 section">C2</div>
+          </div> -->
+<!--<div>More Sections to be added...</div>-->
+<!--<div class="sectionD2 section">D2</div>-->
+<!-- </div> -->

@@ -1,0 +1,99 @@
+label, input, select, textArea {
+    display: block;
+}
+span {
+    color: yellow;
+    font-size: 18px;
+}
+input {
+    width: 98.5%;
+    height: 30px;
+}
+
+textArea {
+    width: 96.5%;
+    resize: none;
+    height: 100px;
+    padding: 10px;
+}
+
+select {
+    width: 100%;
+    height: 35px;
+    margin-bottom: 35px;
+}
+
+#startDate, #endDate {
+    height: 35px;
+}
+
+label {
+    margin-bottom: 5px;
+    font-size: 18px;
+    margin-top: 30px;
+    color: white;
+    letter-spacing: 3px;
+}
+
+.invalidLabel {
+    color: yellow;
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    background-color: black;
+    font-family: arial;
+}
+
+.hidden {
+    display: none;
+}
+
+div {
+    width: 700px;
+}
+
+h1, h2, h3 {
+    text-align: center;
+    letter-spacing: 3px;
+    color: white;
+}
+
+fieldset {
+    margin-top: 40px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 15px;
+}
+
+legend {
+    font-size: 24px;
+    color: white;
+    letter-spacing: 2px;
+}
+
+#submitButton {
+    width: 90px;
+    font-size: 18px;
+    height: 35px;
+    margin-top: 20px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    border-radius: 6px;
+    background: linear-gradient(to bottom right, #fff600, white);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+#otherLabel {
+    color: yellow;
+}
+
+.requiredField {
+    color: yellow;
+    letter-spacing: 2px;
+    font-size: 16px;
+}
