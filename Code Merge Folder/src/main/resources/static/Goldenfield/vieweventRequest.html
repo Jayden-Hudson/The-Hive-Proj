@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="account.css">
+    <link rel="stylesheet" href="dashboard.css">
+
+
+</head>
+
+<body>
+
+<header>
+    <h1>Golden Field</h1>
+
+    <nav class="navigation">
+        <a href="dashboard.html">Home</a>
+        <a href="task.html">Task Management</a>
+        <a href="Reports.html">Reports</a>
+    </nav>
+</header>
+<div class="center-page">
+<!-- Event request list will be shown here -->
+<div id="eventrequestList"></div>
+
+</div>
+
+<script>
+    fetch("http://localhost:8080/api/dashboard/eventrequests")
+   .then(res => res.json())
+   .then(data => {
+
+       let html = '';
+       data.forEach(item => {
+           html += `
+           <div class="request-card">
+               <h2>${item.eventtype}</h2>
+               <p><span class="label">Performer:</span> ${item.performers}</p>
+               <p><span class="label">Attendance:</span> ${item.expectedattendance}</p>
+               <p><span class="label">Age Range:</span> ${item.agerange}</p>
+               <p><span class="label">Budget:</span> ${item.eventbudget}</p>
+               <p><span class="label">Start Time:</span> ${item.starttime}</p>
+               <p><span class="label">Start Date:</span> ${item.startdate}</p>
+               <p><span class="label">Details:</span> ${item.additionaleventdetails}</p>
+           </div>
+           `;
+       });
+
+       document.getElementById("eventrequestList").innerHTML = html;
+
+   })
+   .catch(error => console.log(error));
+
+</script>
+
+</body>
+</html>
