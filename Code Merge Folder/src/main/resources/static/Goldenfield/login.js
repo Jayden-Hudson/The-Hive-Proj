@@ -33,7 +33,7 @@ loginBtn.addEventListener("click", async () => {
             message.style.color = "green";
 
             setTimeout(() => {
-                          window.location.href = "home.html";
+                          window.location.href = "Home.html";
                       }, 1500);
 
         } else {

@@ -1,9 +1,10 @@
 
 body{
-    font-family: 'Montserrat', sans-serif;
+    font-family: Times New Roman;
     background:#f4f6f8;
-    color:#222;
+    color:#rgb(255, 255, 255);
     min-height:100vh;
+    background-color: #f9efd8;
 }
 
 /* Header */
@@ -12,18 +13,19 @@ header{
     top:0;
     left:0;
     width:100%;
-    height:80px;
+    height:60px;
     background:#ffc533;
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:0 50px;
+    padding:0 40px;
     box-shadow:0 4px 10px rgba(0,0,0,0.1);
     z-index:100;
 }
 
 /* Logo */
 header h1{
+
     font-size:34px;
     font-weight:700;
     color:#111;
@@ -32,7 +34,7 @@ header h1{
 /* Navigation */
 .navigation{
     display:flex;
-    gap:25px;
+    gap:20px;
 }
 
 .navigation a{
@@ -93,7 +95,7 @@ button:hover{
 }
 
 .request-card{
-    width:320px;
+    width:fixed;
     background:white;
     border-radius:14px;
     padding:20px;
@@ -108,6 +110,11 @@ button:hover{
 .request-card h2{
     margin-bottom:15px;
     font-size:22px;
+    color:#111;
+}
+.request-card h1{
+    margin-bottom:25px;
+    font-size:60px;
     color:#111;
 }
 

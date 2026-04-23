@@ -1,50 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Goldenfield Venue - Home</title>
     <link rel="stylesheet" href="Home.css" />
+    <link rel="stylesheet" href="navbar.css" />
 </head>
 <body>
-
-    <header>
+<header>
+    <div class="Navbarheader">
         <h1>Goldenfield Venue</h1>
         <nav>
             <ul>
                 <li><a href="Home.html">Home</a></li>
-                <li><a href="Calendar.html">View Shows & Tickets</a></li>
-                <li><a href="eventRequest.html">Book a Event</a></li>
+                <li><a href="TicketProcess.html">Get Tickets</a></li>
+                <li><a href="eventRequest.html">Request Event</a></li>
                 <li><a href="ECreation.html">Create Event</a></li>
-                <li><a href="employee.html">Employees</a></li>
+                <li><a href="Calendar.html">Calendar</a></li>
+                <li><a href="employee.html">Employee</a></li>
+                <li><a href="login.html">Sign In</a></li>
+                <li><a href="signup.html">Sign Up</a></li>
+                <li><a href="empLogin.html">Employee Sign In</a></li>
             </ul>
         </nav>
-    </header>
-    <main>
-        <section class="button-section">
-            <h2>Welcome to Goldenfield Venue</h2>
-            <p>Your place for events, tickets, and unforgettable experiences.</p>
-        </section>
+    </div>
+</header>
 
-        <section class="calendar-section">
-            <div class="calendar">
-                <div id="month-year"></div>
+<main class="homemain">
+    <section class="homesection">
+        <div class="homeboxsection">
+            <p class="hometop">A night to remember experience at GoldenField</p>
+            <h2>Booking and finding your favorite artist and having an unforgettable night</h2>
+            <p>
+                We provide a wide range of events and concerts at GoldenField. We want you to make
+                memories at the Goldenfield venue.
+            </p>
 
+            <div class="homeprocess">
+                <a class="homefirstbtn" href="TicketProcess.html">Get Tickets</a>
+                <a class="homesecondbtn" href="EventRequest.html">Request Event</a>
+            </div>
+        </div>
 
+        <section class="homecalendar">
+            <div class="homecalendarheading">
+                <div>
+                    <p class="homesectionlabel">Calendar</p>
+                    <h3>Event Schedule</h3>
                 </div>
+            </div>
 
-                <div class="weekdays">
-                    <div title="Sunday">Sun</div>
-                    <div title="Monday">Mon</div>
-                    <div title="Tuesday">Tue</div>
-                    <div title="Wednesday">Wed</div>
-                    <div title="Thursday">Thu</div>
-                    <div title="Friday">Fri</div>
-                    <div title="Saturday">Sat</div>
-                </div>
+            <div class="homecalendartools">
+                <button id="previous-month" class="homecalendarbtn" type="button">&#10094;</button>
+                <div id="monthyear" class="calendarmonthyear">Month Year</div>
+                <button id="nextmonth" class="calendarmonthbtn" type="button">&#10095;</button>
+            </div>
 
-                <div id="days"></div>
+            <div class="weekdays">
+                <div>Sun</div>
+                <div>Mon</div>
+                <div>Tue</div>
+                <div>Wed</div>
+                <div>Thu</div>
+                <div>Fri</div>
+                <div>Sat</div>
+            </div>
+
+            <div id="days"></div>
+
+            <div class="homesectiondatebox">
+                <p class="homesectionlabel">Selected Date</p>
+                <h4 id="selectedDateLabel">Choose a day</h4>
+                <ul id="selectedEventList" class="selectedEventList">
+                    <li class="emptyState">Click a day to see event details.</li>
+                </ul>
             </div>
         </section>
-    </main>
-    <script src="Home.js"></script>
+
+    </section>
+</main>
+<script src="Home.js"></script>
+<script src="navbar.js"></script>
 </body>
 </html>
