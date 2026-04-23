@@ -7,7 +7,6 @@ const els = {
   monthYear: document.getElementById('month-year'),
   prevMonthBtn: document.getElementById('previous-month'),
   nextMonthBtn: document.getElementById('next-month'),
-  list: document.getElementById('eventList'),
 };
 
 //for calendar
@@ -39,23 +38,6 @@ async function fetchEvents() {
 
     //put all event info into eventsCache array
     eventsCache = Array.isArray(data) ? data : [];
-
-    //checks if there is list (currently on eventCreation page only)
-    if (els.list) {
-      //clears list to prevent duplicate items
-      els.list.innerHTML = '';
-      //if no items, display message instead of empty list
-      if (eventsCache.length === 0) {
-        const li = document.createElement('li');
-        li.textContent = 'No events.';
-        els.list.appendChild(li);
-      } else {
-        //rende reach event
-        for (const ev of eventsCache) {
-          els.list.appendChild(renderItem(ev));
-        }
-      }
-    }
 
     try { renderCalendar(); } catch (e) {  }
 

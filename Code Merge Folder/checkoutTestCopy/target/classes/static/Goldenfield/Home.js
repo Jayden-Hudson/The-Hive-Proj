@@ -3,7 +3,7 @@ const els = {
   monthYear: document.getElementById('month-year'),
   prevMonthBtn: document.getElementById('previous-month'),
   nextMonthBtn: document.getElementById('next-month'),
-  list: document.getElementById('eventList'),
+  eventList: document.getElementById('eventList'),
 };
 
 const daysList = els.daysList;
@@ -28,15 +28,15 @@ async function fetchEvents() {
 
     eventsCache = Array.isArray(data) ? data : [];
 
-    if (els.list) {
-      els.list.innerHTML = '';
+    if (els.eventList) {
+      els.eventList.innerHTML = '';
       if (eventsCache.length === 0) {
         const li = document.createElement('li');
         li.textContent = 'No events.';
-        els.list.appendChild(li);
+        els.eventList.appendChild(li);
       } else {
         for (const ev of eventsCache) {
-          els.list.appendChild(renderItem(ev));
+          els.eventList.appendChild(renderItem(ev));
         }
       }
     }

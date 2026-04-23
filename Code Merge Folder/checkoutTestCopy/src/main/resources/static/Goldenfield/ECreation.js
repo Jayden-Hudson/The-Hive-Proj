@@ -8,7 +8,8 @@ const updateForm = document.getElementById('updateForm');
 
 //element references
 const els = {
-  list: document.getElementById('eventList'),
+  eventList: document.getElementById('eventList'),
+  requestList: document.getElementById('requestList'),
   refresh: document.getElementById('refreshBtn'),
   form: document.getElementById('createForm'),
   msg: document.getElementById('msg'),
@@ -27,11 +28,13 @@ const els = {
   updatedVenueID: document.getElementById('updatedVenueID'),
   deleteForm: document.getElementById('deleteForm'),
   deletedTitle: document.getElementById('deletedTitle'),
-  deletedEventID: document.getElementById('deletedEventID')
+  deletedEventID: document.getElementById('deletedEventID'),
 };
 
 //stored fetched data from /api/events (all events)
 let eventsCache = [];
+//stored fetched data from /api/eventrequests (all event requests)
+let eventRequestsCache = [];
 
 //pads numbers used in dates to ensure two-digit format to fit iso format which works with calendar
 function pad(n) { return n < 10 ? '0' + n : String(n); }
@@ -48,10 +51,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // initial events fetch
   fetchEvents();
+  fetchEventRequests();
 
 });
 
-// Fetch events from database to show on list + calendar
+// Fetch events from database to show on eventList + calendar
 async function fetchEvents() {
   try {
     const res = await fetch('http://localhost:8080/api/events');
@@ -61,23 +65,23 @@ async function fetchEvents() {
     //put all event info into eventsCache array
     eventsCache = Array.isArray(data) ? data : [];
 
-    //checks if there is list (currently on eventCreation page only)
-    if (els.list) {
+    //checks if there is eventList (currently on eventCreation page only)
+    if (els.eventList) {
 
-      //clears list to prevent duplicate items
-      els.list.innerHTML = '';
+      //clears eventList to prevent duplicate items
+      els.eventList.innerHTML = '';
 
-      //if no items, display message instead of empty list
+      //if no items, display message instead of empty eventList
       if (eventsCache.length === 0) {
         const li = document.createElement('li');
         li.textContent = 'No events.';
-        els.list.appendChild(li);
+        els.eventList.appendChild(li);
       }
 
       else {
         //render each event
         for (const ev of eventsCache) {
-          els.list.appendChild(renderItem(ev));
+          els.eventList.appendChild(renderEvent(ev));
         }
       }
     }
@@ -86,6 +90,44 @@ async function fetchEvents() {
 
   } catch (err) {
     console.error('Failed to fetch events', err);
+  }
+}
+
+// Fetch events from event request tables to show on event requests
+async function fetchEventRequests() {
+  try {
+    const res = await fetch('http://localhost:8080/api/eventrequests');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+
+    //put all event info into eventsCache array
+    eventRequestsCache = Array.isArray(data) ? data : [];
+
+    //checks if there is requestList (currently on eventCreation page only)
+    if (els.requestList) {
+
+      //clears requestList to prevent duplicate items
+      els.requestList.innerHTML = '';
+
+      //if no items, display message instead of empty requestList
+      if (eventRequestsCache.length === 0) {
+        const li = document.createElement('li');
+        li.textContent = 'No events.';
+        els.requestList.appendChild(li);
+      }
+
+      else {
+        //render each event
+        for (const ev of eventRequestsCache) {
+          els.requestList.appendChild(renderRequest(ev));
+        }
+      }
+    }
+
+    try { renderCalendar(); } catch (e) { }
+
+  } catch (err) {
+    console.error('Failed to fetch event requests', err);
   }
 }
 
@@ -217,8 +259,8 @@ function showMessage(text, isError = false) {
   els.msg.className = isError ? 'msg error' : 'msg';
 }
 
-// Render items as list
-function renderItem(item) {
+// Render items as eventList
+function renderEvent(item) {
   const li = document.createElement('li');
   li.classList.add("individualItem");
   const title = `${item.title} --`;
@@ -231,6 +273,23 @@ function renderItem(item) {
   return li;
 }
 
+function renderRequest(item) {
+  const li = document.createElement('li');
+  li.classList.add("individualItem");
+  const eventType = `${item.eventType} --`;
+  const performers = ` Performers: ${item.performers},`;
+  const attendance = ` Attendance: ${item.attendance},`;
+  const ages = ` Ages: ${item.ages},`;
+  const eventDetails = ` Event Details: ${item.eventDetails},`;
+  const budget = ` Budget: ${item.budget},`;
+  const startTime = ` Start Time: ${item.startTime},`;
+  const startDate = ` Start Date: ${item.startDate},`;
+  li.textContent = `${eventType}${performers}${attendance}${ages}${eventDetails}${budget}${startTime}${startDate}`;
+
+  return li;
+}
+
+
 //creates date using current date provided by user's browser
 let date = new Date();
 
@@ -240,34 +299,34 @@ const months = [
 ];
 
 //render item on calendar with title only
-function renderItemSmall(item) {
+function renderEventSmall(item) {
   const el = document.createElement('div');
   el.className = 'eventSmall';
   el.textContent = item.title || '';
   return el;
 }
 
-//show events for a specific day on a list
+//show events for a specific day on a eventList
 function showEventsForDay(isoDate, events) {
-  //clear list to prevent duplicates
-  els.list.innerHTML = '';
+  //clear eventList to prevent duplicates
+  els.eventList.innerHTML = '';
 
-  //create list and show which day
+  //create eventList and show which day
   const header = document.createElement('li');
   header.textContent = `Events for ${isoDate}`;
-  els.list.appendChild(header);
+  els.eventList.appendChild(header);
 
   //show message if no events found
   if (!events || events.length === 0) {
     const li = document.createElement('li');
     li.textContent = 'No events that day.';
-    els.list.appendChild(li);
+    els.eventList.appendChild(li);
     return;
   }
 
   //render each event
   for (const event of events) {
-    els.list.appendChild(renderItem(event));
+    els.eventList.appendChild(renderEvent(event));
   }
 }
 
@@ -325,7 +384,7 @@ function renderCalendar() {
       const container = document.createElement('div');
       container.className = 'dayEventsContainer';
       for (const event of dayEvents) {
-        const small = renderItemSmall(event);
+        const small = renderEventSmall(event);
         container.appendChild(small);
       }
       cell.appendChild(container);
