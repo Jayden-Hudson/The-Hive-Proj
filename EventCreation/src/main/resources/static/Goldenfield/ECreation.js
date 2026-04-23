@@ -289,7 +289,6 @@ function renderRequest(item) {
   return li;
 }
 
-
 //creates date using current date provided by user's browser
 let date = new Date();
 
