@@ -1,0 +1,132 @@
+
+body{
+    font-family: Times New Roman;
+    background:#f4f6f8;
+    color:#rgb(255, 255, 255);
+    min-height:100vh;
+    background-color: #f9efd8;
+}
+
+/* Header */
+header{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:60px;
+    background:#ffc533;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 40px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    z-index:100;
+}
+
+/* Logo */
+header h1{
+
+    font-size:34px;
+    font-weight:700;
+    color:#111;
+}
+
+/* Navigation */
+.navigation{
+    display:flex;
+    gap:20px;
+}
+
+.navigation a{
+    text-decoration:none;
+    color:#111;
+    font-size:18px;
+    font-weight:600;
+    transition:0.3s;
+}
+
+.navigation a:hover{
+    color:white;
+}
+
+/* Main Content */
+body > p{
+    margin-top:130px;
+    text-align:center;
+    font-size:24px;
+    font-weight:600;
+}
+
+/* Button Section */
+.buttons{
+    margin-top:40px;
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:20px;
+}
+
+/* Buttons */
+button{
+    padding:6px 16px;
+    border:none;
+    border-radius:5px;
+    background:#111;
+    color:white;
+    font-size:18px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    background:#ffc533;
+    color:#111;
+    transform:translateY(-3px);
+}
+
+/* Request Cards */
+#eventrequestList{
+    margin-top:120px;
+    padding:30px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:20px;
+    justify-content:center;
+}
+
+.request-card{
+    width:fixed;
+    background:white;
+    border-radius:14px;
+    padding:20px;
+    box-shadow:0 6px 14px rgba(0,0,0,0.08);
+    transition:0.3s;
+}
+
+.request-card:hover{
+    transform:translateY(-5px);
+}
+
+.request-card h2{
+    margin-bottom:15px;
+    font-size:22px;
+    color:#111;
+}
+.request-card h1{
+    margin-bottom:25px;
+    font-size:60px;
+    color:#111;
+}
+
+.request-card p{
+    margin-bottom:8px;
+    font-size:15px;
+    color:#444;
+}
+
+main{
+    padding-top:120px;
+    padding-left:30px;
+    padding-right:30px;
+}
+
