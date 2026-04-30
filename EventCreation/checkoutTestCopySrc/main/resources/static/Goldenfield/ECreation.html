@@ -1,0 +1,149 @@
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<!DOCTYPE html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Event Creation</title>
+  <link rel="stylesheet" type="text/css" href="ECreation.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body>
+  <div id="msg"></div>
+
+  <!-- Existing events -->
+  <div class="form listForm"> <!-- no form, fieldset, or legend here prior to change mt-->
+    <fieldset>
+      <button id="refreshEvents" type="button">Refresh List</button>
+      <legend>Events</legend>
+      <div class="list">
+        <!-- <h2>Events</h2> -->
+        <ul id="eventList"></ul>
+      </div>
+    </fieldset>
+  </div>
+
+  <!-- Event requests -->
+  <div class="form listForm">
+    <fieldset>
+      <button id="refreshRequests" type="button">Refresh List</button>
+      <legend>Event Requests</legend>
+      <div class="list">
+        <!-- <h2>Events</h2> -->
+        <ul id="requestList"></ul>
+      </div>
+    </fieldset>
+  </div>
+
+
+  <div class="form">
+    <fieldset>
+      <legend>Create a New Event</legend>
+      <form id="createForm">
+
+        <label for="eventRequestID">Choose an event request by ID:</label>
+        <input type="number" oninput="populateCreateFormByID(this.value)" id="eventRequestID"
+          placeholder="Enter the ID of the event request">
+
+        <label for="eventRequest">Choose an event request by name:</label>
+        <input type="text" id="eventRequestName" oninput="populateCreateFormByName(this)"
+          placeholder="Enter the name of the event request">
+
+        <label for="data-dropdown">Choose an event request from list:</label>
+        <select id="data-dropdown" onchange="populateCreateFormByDropdown(this.value)">
+          <option value="">Loading...</option>
+        </select>
+
+        <label for="title">Event Name<span>*</span></label>
+        <input type="text" id="title" placeholder="Enter the name of the event" required="">
+        <label for="description">Event description<span>*</span></label>
+        <textarea id="description" placeholder="Enter the description of the event" required=""></textarea>
+        <label for="eventdate">Date<span>*</span></label>
+        <input type="date" id="eventdate" required="">
+        <label for="eventtime">Event Time<span>*</span></label>
+        <input type="time" id="eventtime" required="">
+        <label for="venueid">Venue ID<span>*</span></label>
+        <input type="number" id="venueid" placeholder="Enter the venue ID for the event" required="">
+        <button type="submit">Add Event</button>
+      </form>
+    </fieldset>
+  </div>
+  <div class="form">
+    <fieldset>
+      <legend>Update Existing Event</legend>
+      <form id="updateForm">
+
+        <label for="currentTitle">Current Event Name<span>*</span></label>
+        <input type="text" id="currentTitle" placeholder="Enter the current name of the event" required="">
+
+        <label for="updatedTitle">Updated Event Name<span>*</span></label>
+        <input type="text" id="updatedTitle" placeholder="Enter the updated name of the event" required="">
+
+        <label for="updatedDescription">Updated Event description<span>*</span></label>
+        <input type="text" id="updatedDescription" placeholder="Enter the description of the event" required="">
+
+        <label for="updatedEventDate">Updated Event Date<span>*</span></label>
+        <input type="date" id="updatedEventDate" required="">
+
+        <label for="updatedEventTime">Updated Event Time<span>*</span></label>
+        <input type="time" id="updatedEventTime" required="">
+
+        <label for="updatedVenueID">Updated Venue ID<span>*</span></label>
+        <input type="number" id="updatedVenueID" placeholder="Enter the venue ID for the event" required="">
+
+        <input type="hidden" id="updatedEventID">
+
+        <button type="submit">Update Event</button>
+      </form>
+    </fieldset>
+
+  </div>
+
+  <div class="form">
+    <fieldset>
+      <legend>Delete Existing Event</legend>
+      <form id="deleteForm">
+
+        <label for="deletedTitle">Event Name<span>*</span></label>
+        <input type="text" id="deletedTitle" placeholder="Enter the name of the event to be deleted" required="">
+
+        <input type="hidden" id="deletedEventID">
+
+        <button type="submit">Delete Event</button>
+      </form>
+    </fieldset>
+
+  </div>
+
+
+  <div class="calendar">
+    <div class="month-containerCreation">
+      <button id="previous-month">
+        <span class="material-icons">chevron_left</span>
+      </button>
+      <div id="month-year"></div>
+      <button id="next-month">
+        <span class="material-icons">chevron_right</span>
+      </button>
+    </div>
+    <div class="weekdays">
+      <div title="Sunday">Sun</div>
+      <div title="Monday">Mon</div>
+      <div title="Tuesday">Tue</div>
+      <div title="Wednesday">Wed</div>
+      <div title="Thursday">Thu</div>
+      <div title="Friday">Fri</div>
+      <div title="Saturday">Sat</div>
+    </div>
+
+
+    <div id="days"></div>
+
+  </div>
+
+  <script src="ECreation.js"></script>
+
+</body>
+
+</html>
