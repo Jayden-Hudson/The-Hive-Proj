@@ -1,0 +1,131 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reports</title>
+    <link rel="stylesheet" href="dropdown.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="account.css">
+</head>
+<body>
+
+<header>
+
+    <div class="navbar">
+        <h1>Golden Field<br>
+        Dashboard</h1>
+        <a href="Reports.html">Reports</a>
+        <div class="dropdown">
+            <button class="dropbtn">Task Management
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content">
+                <a href="vieweventRequest.html">View Event Request</a>
+                <a href="ECreation.html">Create Event</a>
+                <a href="employee.html">Add New Employee</a>
+            </div>
+        </div>
+
+        <a href="dashboard.html">Home</a>
+
+    </div>
+</header>
+
+<!--
+<div class="center-page">
+ Ticket Reports
+    <h2>Reports</h2>
+    <p>Event Name</p>
+    <p>Total Tickets Sold:0 <span id="ticketsSold"></span></p>
+    <p>Tickets Available:255 <span id="ticketsAvailable"></span></p>
+
+</div>
+-->
+<!-- chart1----- number of ticket created per month-->
+<!-- chart2----incoming requests-->
+
+<!--transactions-->
+
+
+    <div id="orderbarinside">
+
+        <h2>Orders Bar Chart</h2>
+        <div class="y-labels">
+        <p>500</p>
+        <p>400</p>
+        <p>300</p>
+        <p>200</p>
+        <p>100</p>
+            <p>0</p>
+
+        </div>
+
+        <div id="ordersBar"></div>
+
+    </div>
+
+<div class="containerReports">
+<!-- customer/buyers
+-->
+
+   <div id="customerTableWrapper">
+<h2> Recent Customer</h2>
+    <table>
+
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+        </tr>
+        </thead>
+        <tbody id="CustomerListTable"></tbody>
+    </table>
+</div>
+
+<div id="eventRequestTable">
+<!-- event request-->
+
+    <h2> Incoming Event Request</h2>
+    <table>
+
+        <thead>
+        <tr>
+            <th>Event Type</th>
+            <th>Performer</th>
+            <th>Attendance</th>
+            <th>Age Range</th>
+            <th>Budget</th>
+            <th>Start Time</th>
+            <th>Start Date</th>
+            <th>Details</th>
+        </tr>
+        </thead>
+        <tbody id="eventRequestListTable"></tbody>
+    </table>
+</div>
+
+</div>
+<div class="container2">
+<div id="Employeestable">
+--<h2> Employee</h2>
+<table>
+
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>EmployeeID</th>
+        <th>Department</th>
+
+    </tr>
+    </thead>
+    <tbody id="EmployeeList"></tbody>
+</table>
+</div>
+</div>
+
+<script src="dashboard.js"></script>
+
+
+</body>
+</html>
