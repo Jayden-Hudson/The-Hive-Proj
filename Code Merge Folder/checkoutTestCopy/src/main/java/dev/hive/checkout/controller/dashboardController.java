@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/dashboard")
+
 public class dashboardController {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @GetMapping("/eventrequests")
+    @GetMapping("/api/dashboard")
     public List<Map<String, Object>> getEventRequests() {
         String sql = """
         SELECT
@@ -35,4 +35,46 @@ public class dashboardController {
         return jdbcTemplate.queryForList(sql);
     }
 
+
+    //buyers
+    @GetMapping("/api/buyers")
+    public List<Map<String, Object>> getBuyers() {
+        String sql = """
+        SELECT
+        customer.buyerid,
+            customer.firstname,
+            customer.lastname,
+            customer.email,
+            customer.phone
+        FROM public.buyer customer
+        ORDER BY customer.buyerid DESC
+    """;
+
+        return jdbcTemplate.queryForList(sql);
+    }
+
+//order
+    @GetMapping("/api/orders")
+    public List<Map<String, Object>> getOrders() {
+
+        String sql = """
+            SELECT
+                o.orderid,
+                o.confirmationnum,
+                o.ticketprice,
+                o.passprice,
+                o.protectionprice,
+                o.ordertotal,
+                o.orderdate,
+                o.buyerid
+            FROM public.orders o
+            ORDER BY o.orderid DESC
+        """;
+
+        return jdbcTemplate.queryForList(sql);
+    }
+
+
+
 }
+

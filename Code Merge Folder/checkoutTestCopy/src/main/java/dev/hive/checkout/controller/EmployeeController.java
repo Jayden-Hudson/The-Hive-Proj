@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/employees")
@@ -57,8 +58,32 @@ public class EmployeeController {
                     .body("Login error");
         }
     }
+
+
+
+    //for the dashboard
+    @GetMapping("/dashboard")
+    public List<Map<String, Object>> getEmployee() {
+
+        String sql = """
+        SELECT
+            e.firstname,
+            e.lastname,
+            e.employeecode,
+            d.departmentname
+        FROM employee e
+        JOIN department d
+            ON e.departmentid = d.departmentid
+        ORDER BY e.employeecode DESC
+        """;
+
+        return jdbcTemplate.queryForList(sql);
+    }
+
+
+
     // create employee
-    @PostMapping
+    @PostMapping("/signup")
     public ResponseEntity<String> createEmployee(@RequestBody employee emp) {
         try {
 
@@ -89,6 +114,41 @@ public class EmployeeController {
                     .body("Database Error: " + e.getMessage());
         }
     }
+
+    //update employee
+    @PutMapping("/{lastname}")
+    public ResponseEntity<String> updateEmployee(
+            @PathVariable String lastname,
+            @RequestBody employee emp){
+
+        String sql = """
+        UPDATE employee
+        SET firstname=?, address=?, city=?, state=?
+        WHERE lastname=?
+    """;
+
+        jdbcTemplate.update(sql,
+                emp.getFirstname(),
+                emp.getAddress(),
+                emp.getCity(),
+                emp.getState(),
+                lastname
+        );
+
+        return ResponseEntity.ok("Employee updated");
+    }
+
+ //delete employee
+    @DeleteMapping("/{lastname}")
+    public ResponseEntity<String> deleteEmployee(@PathVariable String lastname){
+
+        String sql = "DELETE FROM employee WHERE lastname=?";
+
+        jdbcTemplate.update(sql, lastname);
+
+        return ResponseEntity.ok("Employee deleted");
+    }
+
 
     // RowMapper
     private RowMapper<employee> employeeRowMapper() {
