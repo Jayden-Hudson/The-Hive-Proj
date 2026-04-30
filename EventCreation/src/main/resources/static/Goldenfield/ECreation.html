@@ -8,37 +8,53 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
+
 <body>
   <div id="msg"></div>
 
   <!-- Existing events -->
   <div class="form listForm"> <!-- no form, fieldset, or legend here prior to change mt-->
     <fieldset>
-      <button id="refreshBtn" type="button">Refresh List</button>
+      <button id="refreshEvents" type="button">Refresh List</button>
       <legend>Events</legend>
       <div class="list">
-      <!-- <h2>Events</h2> -->
+        <!-- <h2>Events</h2> -->
         <ul id="eventList"></ul>
       </div>
     </fieldset>
   </div>
 
   <!-- Event requests -->
-  <div>   
+  <div>
     <fieldset>
-      <button id="refreshBtn" type="button">Refresh List</button>
+      <button id="refreshRequests" type="button">Refresh List</button>
       <legend>Event Requests</legend>
       <div class="list">
-      <!-- <h2>Events</h2> -->
+        <!-- <h2>Events</h2> -->
         <ul id="requestList"></ul>
       </div>
-    </fieldset></div>
+    </fieldset>
+  </div>
 
 
   <div class="form">
     <fieldset>
       <legend>Create a New Event</legend>
       <form id="createForm">
+
+        <label for="eventRequestID">Choose an event request by ID:</label>
+        <input type="number" oninput="populateCreateFormByID(this.value)" id="eventRequestID"
+          placeholder="Enter the ID of the event request">
+
+        <label for="eventRequest">Choose an event request by name:</label>
+        <input type="text" id="eventRequestName" oninput="populateCreateFormByName(this)"
+          placeholder="Enter the name of the event request">
+
+        <label for="data-dropdown">Choose an event request from list:</label>
+        <select id="data-dropdown" onchange="populateCreateFormByDropdown(this.value)">
+          <option value="">Loading...</option>
+        </select>
+
         <label for="title">Event Name<span>*</span></label>
         <input type="text" id="title" placeholder="Enter the name of the event" required="">
         <label for="description">Event description<span>*</span></label>
@@ -103,13 +119,13 @@
 
   <div class="calendar">
     <div class="month-containerCreation">
-    <button id="previous-month">
-      <span class="material-icons">chevron_left</span>
-    </button>
-    <div id="month-year"></div>
-    <button id="next-month">
-      <span class="material-icons">chevron_right</span>
-    </button>
+      <button id="previous-month">
+        <span class="material-icons">chevron_left</span>
+      </button>
+      <div id="month-year"></div>
+      <button id="next-month">
+        <span class="material-icons">chevron_right</span>
+      </button>
     </div>
     <div class="weekdays">
       <div title="Sunday">Sun</div>
@@ -129,4 +145,5 @@
   <script src="ECreation.js"></script>
 
 </body>
+
 </html>

@@ -1,11 +1,13 @@
 package dev.hive.checkout.controller;
 
+import dev.hive.checkout.entity.EventCreation;
 import dev.hive.checkout.entity.EventRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -85,7 +87,7 @@ public class EventRequestController {
         }
     }
 
-    // get event request data for displaying on event creation
+    // get event request data for displaying on event creation page
     @GetMapping("/api/eventrequests")
     public List<EventRequest> getAllEventRequests() {
         String selectEventSql = """
@@ -105,77 +107,30 @@ public class EventRequestController {
             return event;
         });
     }
+
+    // Get event request data by ID
+    @GetMapping("/api/eventrequests/{id}")
+    public EventRequest getEventById(@PathVariable int id) {
+        String eventByIdSql = """
+                SELECT * FROM public.eventrequest WHERE requestid = ?
+                """;
+        try {
+            return jdbcTemplate.queryForObject(eventByIdSql, (rs, rowNum) -> {
+                EventRequest event = new EventRequest();
+                event.setEventType(rs.getString("eventtype"));
+                event.setPerformers(rs.getString("performers"));
+                event.setAttendance(rs.getString("expectedattendance"));
+                event.setAges(rs.getString("agerange"));
+                event.setEventDetails(rs.getString("additionaleventdetails"));
+                event.setBudget(rs.getString("eventbudget"));
+                event.setStartTime(rs.getString("starttime"));
+                event.setStartDate(rs.getString("startdate"));
+                return event;
+            }, id);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Event not found with id: " + id);
+        }
+    }
+
 }
-
-// Attempt 1 @ fk
-/*
- * String eventSql = """
- * INSERT INTO public.eventrequest
- * (eventtype, performers, expectedattendance, agerange, additionaleventdetails,
- * eventbudget, starttime, startdate)
- * VALUES (?, ?, ?, ?, ?, ?, ?, ?)
- * """;
- * 
- * int eventRows = jdbcTemplate.update(eventSql,
- * event.getEventType(),
- * event.getPerformers(),
- * event.getAttendance(),
- * event.getAges(),
- * event.getEventDetails(),
- * event.getBudget(),
- * event.getStartTime(), // Ensure correct SQL type
- * event.getStartDate() // Ensure correct SQL type
- * );
- * 
- * String contactSql = """
- * INSERT INTO public.contactinfo
- * (companyname, contactfirstname, contactlastname, phone, email,
- * besttimetobereached, links, additionalcontactnotes)
- * VALUES (?, ?, ?, ?, ?, ?, ?, ?)
- * """;
- * 
- * int contactRows = jdbcTemplate.update(contactSql,
- * event.getCompany(),
- * event.getFirstName(),
- * event.getLastName(),
- * event.getPhone(),
- * event.getEmail(),
- * event.getContactTime(),
- * event.getLinks(), // Ensure correct SQL type
- * event.getContactNotes(),
- * eventSql// Ensure correct SQL type
- * );
- * return eventRows > 0 && contactRows > 0 ? "Data inserted successfully" :
- * "Insert failed";
- */
-
-// Testing retrieval of data with getters
-/*
- * @PostMapping("/api/eventrequest")
- * public String eventData(@RequestBody EventRequest eventData) throws
- * JsonProcessingException {
- * System.out.println("Event data received: " + eventData.getEventType() + " " +
- * eventData.getPerformers() + " " +
- * eventData.getStartDate() + " " +
- * eventData.getStartTime() + " " +
- * eventData.getAttendance() + " " +
- * eventData.getAges() + " " +
- * eventData.getOtherLabel() + " " +
- * eventData.getBudget() + " " +
- * eventData.getEventDetails());
- * 
- * System.out.println("Contact data received: " + eventData.getCompany() + " " +
- * eventData.getFirstName() + " " +
- * eventData.getLastName() + " " +
- * eventData.getPhone() + " " +
- * eventData.getEmail() + " " +
- * eventData.getContactTime() + " " +
- * eventData.getLinks() + " " +
- * eventData.getContactNotes());
- * 
- * //Returns eventData = {...}
- * System.out.println(new ObjectMapper().writeValueAsString(eventData));
- * //What's returned in webpage "alert"
- * return "Handled.";
- * }
- */

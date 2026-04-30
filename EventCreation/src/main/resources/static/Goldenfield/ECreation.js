@@ -10,7 +10,8 @@ const updateForm = document.getElementById('updateForm');
 const els = {
   eventList: document.getElementById('eventList'),
   requestList: document.getElementById('requestList'),
-  refresh: document.getElementById('refreshBtn'),
+  refreshEvents: document.getElementById('refreshEvents'),
+  refreshRequests: document.getElementById('refreshRequests'),
   form: document.getElementById('createForm'),
   msg: document.getElementById('msg'),
   title: document.getElementById('title'),
@@ -42,17 +43,22 @@ function pad(n) { return n < 10 ? '0' + n : String(n); }
 document.addEventListener('DOMContentLoaded', () => {
   els.msg = els.msg || document.getElementById('msg');
   els.form = els.form || document.getElementById('createForm');
-  els.refresh = els.refresh || document.getElementById('refreshBtn');
+  els.refreshEvents = els.refreshEvents || document.getElementById('refreshEvents');
+  els.refreshRequests = els.refreshRequests || document.getElementById('refreshRequests');
 
   // Wire refresh button to reload events
-  if (els.refresh) {
-    els.refresh.addEventListener('click', () => fetchEvents());
+  if (els.refreshEvents) {
+    els.refreshEvents.addEventListener('click', () => fetchEvents());
+
+  }
+
+  if (els.refreshRequests) {
+    els.refreshRequests.addEventListener('click', () => fetchEventRequests());
   }
 
   // initial events fetch
   fetchEvents();
   fetchEventRequests();
-
 });
 
 // Fetch events from database to show on eventList + calendar
@@ -124,6 +130,7 @@ async function fetchEventRequests() {
       }
     }
 
+    try { populateDropdown(); } catch (e) { }
     try { renderCalendar(); } catch (e) { }
 
   } catch (err) {
@@ -288,6 +295,95 @@ function renderRequest(item) {
 
   return li;
 }
+
+//populate create event form based on data in event request
+async function populateCreateFormByID(id) {
+  const form = document.getElementById('createForm');
+  if (!form) return;
+
+  // Fetch event request data by ID
+  try {
+    const response = await fetch(`http://localhost:8080/api/eventrequests/${id}`);
+    if (!response.ok) {
+      console.error('Error fetching event request:', response.statusText);
+      return;
+    }
+    const data = await response.json();
+    if (!data) {
+      console.error('Error fetching event request:', response.statusText);
+      return;
+    }
+
+    // Populate form fields with data
+    form.title.value = data.performers || '';
+    form.description.value = data.eventDetails || '';
+    form.eventdate.value = data.startDate || '';
+  }
+  catch (err) {
+    console.error('Error populating create form by ID:', err);
+  }
+}
+
+//populate create form by typed name
+async function populateCreateFormByName(name) {
+
+  try {
+    const form = document.getElementById('createForm');
+    if (!form) return;
+
+    const requestTitle = name.value.trim();
+
+    const matches = eventRequestsCache.filter(
+      ev => ev.performers === requestTitle
+    );
+
+    if (matches.length === 0) {
+      console.log('No matching event request found');
+      return;
+    }
+
+    form.title.value = matches[0].performers || '';
+    form.description.value = matches[0].eventDetails || '';
+    form.eventdate.value = matches[0].startDate || '';
+
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+//populate dropdown with event request performers
+async function populateDropdown() {
+  const dropdown = document.getElementById('data-dropdown');
+
+  try {
+    const items = eventRequestsCache;
+
+    dropdown.innerHTML = '<option value="">Select an option</option>';
+
+    //loop through data and create option elements
+    items.forEach(item => {
+      const option = document.createElement('option');
+      option.textContent = item.performers;
+      dropdown.appendChild(option);
+    });
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+}
+
+//populate create form using dropdown input
+function populateCreateFormByDropdown(selectedOption) {
+  const form = document.getElementById('createForm');
+  if (!form) return;
+
+  const data = eventRequestsCache.find(item => item.performers === selectedOption);
+  if (!data) return;
+
+  form.title.value = data.performers || '';
+  form.description.value = data.eventDetails || '';
+  form.eventdate.value = data.startDate || '';
+}
+
 
 //creates date using current date provided by user's browser
 let date = new Date();
