@@ -1,12 +1,13 @@
 :root {
-    --primary: #FFC533;
-    --accent: #C76B12;
-    --base: #1F1B16;
-    --surface: #F4E6C8;
+    --primary: #ffdf00;      /* Yellow text/main highlight */
+    --accent: #262626;       /* Dark gray navbar/cards */
+    --base: #000;            /* Main black background */
+    --surface: #fff;         /* White background/shadow panels */
     --white: #fff;
-    --shadow: 0 18px 40px rgba(31, 27, 22, 0.14);
-    --shadowSoft: 0 10px 24px rgba(31, 27, 22, 0.10);
-    --borderSoft: rgba(31, 27, 22, 0.12);
+
+    --shadow: 0 18px 40px rgba(255, 255, 255, 0.22);
+    --shadowSoft: 0 10px 24px rgba(255, 255, 255, 0.16);
+    --borderSoft: rgba(255, 255, 255, 0.18);
 }
 
 * { box-sizing: border-box; }
@@ -14,34 +15,35 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    color: var(--base);
+    color: var(--primary);
     background:
-        radial-gradient(circle at top left, rgba(255, 197, 51, 0.12), transparent 25%),
-        linear-gradient(180deg, #f9efd8 0%, var(--surface) 45%, #efe0bd 100%);
+        radial-gradient(circle at top left, rgba(255, 223, 0, 0.18), transparent 28%),
+        linear-gradient(180deg, var(--base) 0%, #050505 45%, #000 100%);
 }
 
 header {
     position: sticky;
     top: 0;
-    z-index: 100;
-    background: var(--base);
-    border-bottom: 3px solid rgba(255, 197, 51, 0.25);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
+    z-index: 1000;
+    background: var(--accent);
+    border-bottom: 3px solid var(--primary);
+    box-shadow: var(--shadowSoft);
+    transition: transform 0.3s ease;
 }
 
-.Navbarheader,
-.homemain {
-    max-width: 1240px;
-    margin: 0 auto;
+header.nav-hidden {
+    transform: translateY(-100%);
 }
 
 .Navbarheader {
-    padding: 20px 24px 24px;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 18px 24px;
     text-align: center;
 }
 
 header h1 {
-    margin: 0 0 16px;
+    margin: 0 0 14px;
     color: var(--primary);
     font-size: 2rem;
 }
@@ -52,24 +54,30 @@ nav ul {
     padding: 0;
     display: flex;
     justify-content: center;
+    align-items: center;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 12px;
+}
+
+nav ul li {
+    margin: 0;
 }
 
 nav ul li a {
     display: inline-block;
-    padding: 10px 14px;
+    padding: 10px 16px;
     border-radius: 999px;
     text-decoration: none;
     font-weight: bold;
-    color: var(--surface);
-    transition: .2s ease;
+    color: var(--primary);
+    background: transparent;
+    transition: 0.2s ease;
 }
 
 nav ul li a:hover {
-    background: var(--accent);
-    color: var(--white);
-    transform: translateY(-1px);
+    background: var(--primary);
+    color: var(--base);
+    transform: translateY(-2px);
 }
 
 .homemain { padding: 34px 24px 60px; }
@@ -83,7 +91,7 @@ nav ul li a:hover {
 
 .homeboxsection,
 .homecalendar {
-    background: rgba(255, 255, 255, 0.92);
+    background: black;
     border: 1px solid var(--borderSoft);
     border-radius: 24px;
     box-shadow: var(--shadow);
@@ -97,7 +105,7 @@ nav ul li a:hover {
     margin: 0 0 10px;
     padding: 8px 14px;
     border-radius: 999px;
-    background: rgba(255, 197, 51, 0.18);
+    background: #ffdf00;
     color: var(--accent);
     font: bold 0.85rem Arial, sans-serif;
     text-transform: uppercase;
@@ -153,8 +161,8 @@ nav ul li a:hover {
 }
 
 .homesecondbtn {
-    background: var(--base);
-    color: var(--surface);
+    background: var(--primary);
+    color: var(--base);
 }
 
 .homesecondbtn:hover {
@@ -178,7 +186,7 @@ nav ul li a:hover {
 
 .homesectionlabel {
     margin: 0;
-    color: var(--accent);
+    color: var(--primary);
     font-size: 0.8rem;
     font-weight: bold;
     text-transform: uppercase;
@@ -232,7 +240,7 @@ nav ul li a:hover {
     padding: 8px 0;
     text-align: center;
     font-weight: bold;
-    color: var(--accent);
+    color: var(--primary);
 }
 
 .empty { min-height: 120px; }
@@ -251,13 +259,13 @@ nav ul li a:hover {
 
 .calendarDay:hover {
     transform: translateY(-2px);
-    border-color: rgba(199, 107, 18, 0.35);
+    border-color: #ffdf00;
     box-shadow: var(--shadowSoft);
 }
 
 .calendarDay.selected {
-    background: linear-gradient(180deg, rgba(255, 197, 51, 0.28), rgba(199, 107, 18, 0.14));
-    border-color: rgba(199, 107, 18, 0.38);
+    background: linear-gradient(180deg, #ffdf00, rgba(199, 107, 18, 0.14));
+    border-color: #ffdf00;
 }
 
 .dayNumber {
@@ -357,4 +365,23 @@ nav ul li a:hover {
     }
 
     .empty { min-height: 110px; }
+}
+
+@media (max-width: 700px) {
+    .Navbarheader {
+        padding: 14px 12px;
+    }
+
+    header h1 {
+        font-size: 1.5rem;
+    }
+
+    nav ul {
+        gap: 8px;
+    }
+
+    nav ul li a {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
 }

@@ -182,6 +182,26 @@ function renderSelectedEvents(iso) {
   });
 }
 
+function setupAutoHideNavbar() {
+  const header = document.querySelector('header');
+
+  if (!header) return;
+
+  let lastScrollY = window.scrollY;
+
+  window.addEventListener('scroll', () => {
+    const currentScrollY = window.scrollY;
+
+    if (currentScrollY > lastScrollY && currentScrollY > 100) {
+      header.classList.add('nav-hidden');
+    } else {
+      header.classList.remove('nav-hidden');
+    }
+
+    lastScrollY = currentScrollY;
+  });
+}
+
 function bindEvents() {
   if (els.prevBtn) {
     els.prevBtn.addEventListener('click', () => {
@@ -209,8 +229,29 @@ function bindEvents() {
   }
 }
 
+function setupAutoHideNavbar() {
+  const header = document.querySelector('header');
+
+  if (!header) return;
+
+  let lastScrollY = window.scrollY;
+
+  window.addEventListener('scroll', () => {
+    const currentScrollY = window.scrollY;
+
+    if (currentScrollY > lastScrollY && currentScrollY > 100) {
+      header.classList.add('nav-hidden');
+    } else {
+      header.classList.remove('nav-hidden');
+    }
+
+    lastScrollY = currentScrollY;
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   selectedIso = getIsoDate(new Date());
+  setupAutoHideNavbar();
   bindEvents();
   fetchEvents();
 });
