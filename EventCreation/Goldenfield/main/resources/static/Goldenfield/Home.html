@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Goldenfield Venue - Home</title>
+    <link rel="stylesheet" href="Home.css" />
+    <link rel="stylesheet" href="navbar.css" />
+</head>
+<body>
+    <header>
+        <div class="Navbarheader">
+            <h1 class="whiteText">Goldenfield Venue</h1>
+            <nav>
+                <ul>
+                    <li><a href="Home.html">Home</a></li>
+                    <li><a href="EventRequest.html">Book an Event</a></li>
+                    <li><a href="ECreation.html">Create Event</a></li>
+                    <li><a href="Calendar.html">View Shows & Tickets</a></li>
+                    <li><a href="employee.html">Employees</a></li>
+                    <li><a href="SignIn.html">Sign In</a></li>
+                    <li><a href="SignUp.html">Sign Up</a></li>
+                    <li><a href="empLogin.html">Employee Sign In</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="homemain">
+        <section class="homesection">
+            <div class="homeboxsection">
+                <p class="hometop">A night to remember experience at GoldenField</p>
+                <h2 class="whiteText">Booking and finding your favorite artist and having an unforgettable night</h2>
+                <p>
+                    We provide a wide range of events and concerts at GoldenField. We want you to make 
+                    memories at the Goldenfield venue. 
+                </p>
+
+                <div class="homeprocess">
+                    <a class="homefirstbtn" href="Calendar.html">View Shows & Tickets</a>
+                    <a class="homesecondbtn" href="EventRequest.html">Book an Event</a>
+                </div>
+            </div>
+
+            <section class="homecalendar">
+                <div class="homecalendarheading">
+                    <div>
+                        <p class="homesectionlabel">Calendar</p>
+                        <h3 class="whiteText">Event Schedule</h3>
+                    </div>
+                </div>
+
+                <div class="homecalendartools">
+                    <button id="previous-month" class="homecalendarbtn" type="button">&#10094;</button>
+                    <div id="monthyear" class="calendarmonthyear whiteText">Month Year</div>
+                    <button id="nextmonth" class="homecalendarbtn" type="button">&#10095;</button>
+                </div>
+
+                <div class="weekdays">
+                    <div>Sun</div>
+                    <div>Mon</div>
+                    <div>Tue</div>
+                    <div>Wed</div>
+                    <div>Thu</div>
+                    <div>Fri</div>
+                    <div>Sat</div>
+                </div>
+
+                <div id="days"></div>
+
+                <div class="homesectiondatebox">
+                    <p class="homesectionlabel">Selected Date</p>
+                    <h4 id="selectedDateLabel">Choose a day</h4>
+                    <ul id="selectedEventList" class="selectedEventList">
+                        <li class="emptyState">Click a day to see event details.</li>
+                    </ul>
+                </div>
+            </section>
+
+        </section>
+    </main>
+    <script src="Home.js"></script>
+    <script src="navbar.js"></script>
+</body>
+</html>
