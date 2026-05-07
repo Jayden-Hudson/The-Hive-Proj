@@ -1,0 +1,22 @@
+  <header id="site-navbar">
+       <div class="Navbarheader">
+            <h1>Goldenfield Venue</h1>
+            <nav>
+                <ul>
+                    <li><a href="Home.html">Home</a></li>
+                    <li><a href="TicketProcess.html">Get Tickets</a></li>
+                    <li><a href="EventRequest.html">Request Event</a></li>
+                    <li><a href="ECreation.html">Create Event</a></li>
+                    <li><a href="Calendar.html">Calendar</a></li>
+                    <li><a href="employee.html">Employee</a></li>
+                    <li><a href="SignIn.html">Sign In</a></li>
+                    <li><a href="SignUp.html">Sign Up</a></li>
+                    <li><a href="EmployeeSignIn.html">Employee Sign In</a></li>
+                </ul>
+            </nav>
+        </div>
+  </header>
+
+  Use this in the body and after the </header> then put the rest of your html code in <main></main> 
+
+  Also reference the navbar.css and navbar.js
