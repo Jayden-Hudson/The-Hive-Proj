@@ -67,7 +67,7 @@ public class EventCreation {
     }
 
     public Boolean getEventCancelled() {
-        return eventCancelled;
+        return eventCancelled != null ? eventCancelled : false;
     }
 
     public void setEventCancelled(Boolean eventCancelled) {

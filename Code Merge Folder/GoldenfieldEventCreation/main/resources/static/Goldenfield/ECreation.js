@@ -11,7 +11,6 @@ const els = {
   refreshEvents: document.getElementById('refreshEvents'),
   refreshRequests: document.getElementById('refreshRequests'),
   createForm: document.getElementById('createForm'),
-  msg: document.getElementById('msg'),
   title: document.getElementById('title'),
   description: document.getElementById('description'),
   eventdate: document.getElementById('eventdate'),
@@ -38,7 +37,6 @@ let eventRequestsCache = [];
 function pad(n) { return n < 10 ? '0' + n : String(n); }
 
 document.addEventListener('DOMContentLoaded', () => {
-  els.msg = els.msg || document.getElementById('msg');
   els.refreshEvents = els.refreshEvents || document.getElementById('refreshEvents');
   els.refreshRequests = els.refreshRequests || document.getElementById('refreshRequests');
 
@@ -247,6 +245,7 @@ function validateEvent(obj) {
   return { valid: errors.length === 0, errors };
 }
 
+/*
 //show message to user
 function showMessage(text, isError = false) {
 
@@ -269,6 +268,7 @@ function showMessage(text, isError = false) {
   els.msg.textContent = text;
   els.msg.className = isError ? 'msg error' : 'msg';
 }
+*/
 
 // Render items as eventList
 function renderEvent(item) {
@@ -512,7 +512,7 @@ cancelForm.addEventListener('submit', function (event) {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ eventcancelled: eventcancelled }),
+    body: JSON.stringify({ eventCancelled: eventcancelled }),
   }).then(response => response.text())
     .then(data => alert(data))
     .then(() => {
@@ -521,8 +521,6 @@ cancelForm.addEventListener('submit', function (event) {
     })
     .catch(error => console.error('Error:', error));
 });
-
-
 
 //creates date using current date provided by user's browser
 let date = new Date();
@@ -535,8 +533,6 @@ const months = [
 //render item on calendar with title only
 function renderEventSmall(item) {
   const el = document.createElement('div');
-
-  console.log(item);
 
   //default class
   el.className = 'eventSmall';

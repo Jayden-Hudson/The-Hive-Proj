@@ -5,12 +5,29 @@
   <meta charset="UTF-8" />
   <title>Event Creation</title>
   <link rel="stylesheet" type="text/css" href="ECreation.css">
+  <link rel="stylesheet" href="navbar.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
 <body>
-  <div id="msg"></div>
+  <header>
+    <div class="Navbarheader">
+      <h1 class="whiteText">Goldenfield Venue</h1>
+      <nav>
+        <ul>
+          <li><a href="Home.html">Home</a></li>
+          <li><a href="EventRequest.html">Book an Event</a></li>
+          <li><a href="ECreation.html">Create Event</a></li>
+          <li><a href="Calendar.html">View Shows & Tickets</a></li>
+          <li><a href="employee.html">Employees</a></li>
+          <li><a href="SignIn.html">Sign In</a></li>
+          <li><a href="SignUp.html">Sign Up</a></li>
+          <li><a href="empLogin.html">Employee Sign In</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
 
   <!-- Existing events -->
   <div class="form listForm"> <!-- no form, fieldset, or legend here prior to change mt-->
@@ -74,7 +91,7 @@
       <legend>Update Existing Event</legend>
       <form id="updateForm">
 
-          <label for="updateFormData-dropdown">Choose an event request from list:</label>
+        <label for="updateFormData-dropdown">Choose an event request from list:</label>
         <select id="updateFormData-dropdown" onchange="populateUpdateFormByDropdown(this.value)">
           <option value="">Loading...</option>
         </select>
@@ -112,16 +129,17 @@
           <option value="">Loading...</option>
         </select>
 
-         <label for="cancelledTitle">Cancelled Event Name<span>*</span></label>
-        <input type="text" id="cancelledTitle" placeholder="Enter the name of the event to cancel" required="">
+        <label for="cancelledTitle">Cancelled Event Name<span>*</span></label>
+        <input type="text" id="cancelledTitle" placeholder="Enter the name of the event to cancel/activate" required="">
 
-        <input type="radio" id="cancelEvent" name="eventStatus" value="cancel">
-        <label for="cancelEvent">Cancel Event</label>
+        <div>
+          <input type="radio" id="cancelEvent" name="eventStatus" value="cancel">
+          <label for="cancelEvent">Cancel Event</label>
 
-        <input type="radio" id="activateEvent" name="eventStatus" value="activate">
-        <label for="activateEvent">Activate Event</label>
-
-         <input type="hidden" id="cancelledEventID">
+          <input type="radio" id="activateEvent" name="eventStatus" value="activate">
+          <label for="activateEvent">Activate Event</label>
+        </div>
+        <input type="hidden" id="cancelledEventID">
 
         <button type="submit">Cancel Event</button>
       </form>
@@ -155,7 +173,7 @@
   </div>
 
   <script src="ECreation.js"></script>
-
+<script src="navbar.js"></script>
 </body>
 
 </html>

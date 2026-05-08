@@ -87,9 +87,6 @@
                     contactNotes: contactNotes.value
                 }
 
-                console.log(eventData);
-
-
                 //Send event data
                 fetch('http://localhost:8080/api/eventrequest', {  //Replace these :8080/as/needed
                     method: 'POST',

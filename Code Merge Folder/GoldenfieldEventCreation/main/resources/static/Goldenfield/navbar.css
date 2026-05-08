@@ -1,0 +1,114 @@
+:root {
+    --primary: #ffdf00;
+    --accent: #262626;
+    --base: #000;
+    --surface: #fff;
+    --white: #fff;
+    --shadowSoft: 0 10px 24px rgba(255, 255, 255, 0.16);
+}
+
+/* Pushes the page content down so it does not hide behind the fixed navbar */
+body {
+    padding-top: 135px;
+}
+
+/* Main navbar */
+#site-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 9999;
+
+    background: var(--accent);
+    border-bottom: 3px solid var(--primary);
+    box-shadow: var(--shadowSoft);
+
+    transition: transform 0.3s ease;
+}
+
+/* This hides/collapses the navbar when scrolling down */
+#site-navbar.nav-hidden {
+    transform: translateY(-100%);
+}
+
+.Navbarheader {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 18px 24px;
+    text-align: center;
+}
+
+.Navbarheader h1 {
+    margin: 0 0 14px;
+    color: var(--primary);
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.Navbarheader nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.Navbarheader nav ul li {
+    margin: 0;
+}
+
+.Navbarheader nav ul li a {
+    display: inline-block;
+    padding: 10px 16px;
+    border-radius: 999px;
+
+    text-decoration: none;
+    font-weight: bold;
+
+    color: var(--primary);
+    background: transparent;
+
+    transition: 0.2s ease;
+}
+
+.Navbarheader nav ul li a:hover {
+    background: var(--primary);
+    color: var(--base);
+    transform: translateY(-2px);
+}
+
+/* Optional: shows which page you are on */
+.Navbarheader nav ul li a.active {
+    background: var(--primary);
+    color: var(--base);
+}
+
+/* Mobile/tablet */
+@media (max-width: 700px) {
+    body {
+        padding-top: 180px;
+    }
+
+    .Navbarheader {
+        padding: 14px 12px;
+    }
+
+    .Navbarheader h1 {
+        font-size: 1.5rem;
+    }
+
+    .Navbarheader nav ul {
+        gap: 8px;
+    }
+
+    .Navbarheader nav ul li a {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
+}
