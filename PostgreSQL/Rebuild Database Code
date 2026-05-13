@@ -1,0 +1,437 @@
+CREATE TABLE venue (
+    venueid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    venuename VARCHAR(100) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    state CHAR(2) NOT NULL,
+    zipcode VARCHAR(10) NOT NULL,
+    maxcapacity INT NOT NULL CHECK (maxcapacity > 0)
+);
+
+
+CREATE TABLE buyer (
+    buyerid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    firstname VARCHAR(100) NOT NULL,
+    lastname VARCHAR(100) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    email VARCHAR(150) NOT NULL
+);
+
+
+CREATE TABLE account (
+    userid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    buyerid INT NOT NULL UNIQUE,
+    username VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    CONSTRAINT fk_account_buyer
+        FOREIGN KEY (buyerid) REFERENCES buyer(buyerid)
+);
+
+
+CREATE TABLE eventrequest (
+    requestid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    eventtype VARCHAR(100) NOT NULL,
+    performers TEXT NOT NULL,
+    expectedattendance INT NOT NULL,
+    agerange VARCHAR(50) NOT NULL,
+    additionaleventdetails TEXT,
+    eventbudget NUMERIC(10,2) NOT NULL,
+    starttime TIME NOT NULL,
+    startdate DATE NOT NULL,
+    requestprocessed BOOLEAN
+);
+
+
+CREATE TABLE contactinfo (
+    contactinfoid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    requestid INT NOT NULL,
+    companyname VARCHAR(150) NOT NULL,
+    contactfirstname VARCHAR(100) NOT NULL,
+    contactlastname VARCHAR(100) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    email VARCHAR(150) NOT NULL,
+    besttimetobereached VARCHAR(100) NOT NULL,
+    links TEXT,
+    additionalcontactnotes TEXT,
+    CONSTRAINT fk_contactinfo_request
+        FOREIGN KEY (requestid) REFERENCES eventrequest(requestid)
+);
+
+
+CREATE TABLE coupons (
+    couponcode VARCHAR(50) PRIMARY KEY,
+    discountamount NUMERIC(10,2) NOT NULL,
+    active BOOLEAN NOT NULL DEFAULT TRUE,
+    expirationdate DATE
+);
+
+
+CREATE TABLE department (
+    departmentid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    departmentname VARCHAR(100) NOT NULL
+);
+
+
+-- =========================
+-- EMPLOYEE / MANAGER TABLES
+-- =========================
+
+CREATE TABLE employee (
+    employeeid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    firstname VARCHAR(100) NOT NULL,
+    lastname VARCHAR(100) NOT NULL,
+    dob DATE,
+    address VARCHAR(255),
+    zipcode VARCHAR(10),
+    city VARCHAR(100),
+    state CHAR(2),
+    salary NUMERIC(10,2),
+    wagerate NUMERIC(10,2),
+    hiredate DATE NOT NULL,
+    releaseddate DATE,
+    managerid INT,
+    departmentid INT,
+    employee CHAR(50),
+    CONSTRAINT fk_employee_manager
+        FOREIGN KEY (managerid) REFERENCES employee(employeeid),
+    CONSTRAINT fk_employee_department
+        FOREIGN KEY (departmentid) REFERENCES department(departmentid)
+);
+
+
+CREATE TABLE manager (
+    managerid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    employeeid INT NOT NULL UNIQUE,
+    departmentid INT NOT NULL,
+    username VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    firstname VARCHAR(100) NOT NULL,
+    lastname VARCHAR(100) NOT NULL,
+    phone VARCHAR(20),
+    email VARCHAR(150),
+    hiredate DATE NOT NULL,
+    active BOOLEAN NOT NULL DEFAULT TRUE,
+    CONSTRAINT fk_manager_employee
+        FOREIGN KEY (employeeid) REFERENCES employee(employeeid),
+    CONSTRAINT fk_manager_department
+        FOREIGN KEY (departmentid) REFERENCES department(departmentid)
+);
+
+
+-- =========================
+-- SECTIONS / ROWS
+-- =========================
+
+CREATE TABLE sections (
+    sectionid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    sectionname VARCHAR(100) NOT NULL,
+    numrows INT NOT NULL DEFAULT 0,
+    numticketsavailable INT NOT NULL DEFAULT 0,
+    numticketssold INT NOT NULL DEFAULT 0,
+    soldout BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+
+CREATE TABLE "rows" (
+    rowid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    sectionid INT NOT NULL,
+    rowname VARCHAR(50) NOT NULL,
+    rownumber INT NOT NULL,
+    numseats INT NOT NULL DEFAULT 0,
+    numticketsavailable INT NOT NULL DEFAULT 0,
+    numticketssold INT NOT NULL DEFAULT 0,
+    soldout BOOLEAN NOT NULL DEFAULT FALSE,
+    CONSTRAINT fk_rows_sections
+        FOREIGN KEY (sectionid) REFERENCES sections(sectionid)
+);
+
+
+-- =========================
+-- EVENT TABLES
+-- =========================
+
+CREATE TABLE event (
+    eventid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    requestid INT,
+    venueid INT NOT NULL,
+    eventname VARCHAR(150) NOT NULL,
+    eventtype VARCHAR(100) NOT NULL,
+    startdate DATE NOT NULL,
+    starttime TIME NOT NULL,
+    enddate DATE,
+    endtime TIME,
+    CONSTRAINT fk_event_request
+        FOREIGN KEY (requestid) REFERENCES eventrequest(requestid),
+    CONSTRAINT fk_event_venue
+        FOREIGN KEY (venueid) REFERENCES venue(venueid)
+);
+
+
+CREATE TABLE performers (
+    performerid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    eventid INT NOT NULL,
+    performername VARCHAR(150) NOT NULL,
+    performertype VARCHAR(100) NOT NULL,
+    CONSTRAINT fk_performers_event
+        FOREIGN KEY (eventid) REFERENCES event(eventid)
+);
+
+
+CREATE TABLE rowsbyevent (
+    eventid INT NOT NULL,
+    rowid INT NOT NULL,
+    numticketsavailable INT NOT NULL DEFAULT 0,
+    numticketssold INT NOT NULL DEFAULT 0,
+    soldout BOOLEAN NOT NULL DEFAULT FALSE,
+    CONSTRAINT eventrows_pkey PRIMARY KEY (eventid, rowid),
+    CONSTRAINT eventrows_eventid_fkey
+        FOREIGN KEY (eventid) REFERENCES event(eventid),
+    CONSTRAINT eventrows_rowid_fkey
+        FOREIGN KEY (rowid) REFERENCES "rows"(rowid)
+);
+
+
+CREATE TABLE moshpit (
+    pitid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    eventid INT NOT NULL UNIQUE,
+    pitname VARCHAR(100) NOT NULL,
+    maxcapacity INT NOT NULL CHECK (maxcapacity <= 150),
+    numticketsavailable INT NOT NULL DEFAULT 0,
+    numticketssold INT NOT NULL DEFAULT 0,
+    soldout BOOLEAN NOT NULL DEFAULT FALSE,
+    CONSTRAINT fk_moshpit_event
+        FOREIGN KEY (eventid) REFERENCES event(eventid)
+);
+
+
+-- =========================
+-- ORDER / PAYMENT TABLES
+-- =========================
+
+CREATE TABLE orders (
+    orderid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    buyerid INT NOT NULL,
+    orderdate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    subtotal NUMERIC(10,2) NOT NULL DEFAULT 0,
+    tax NUMERIC(10,2) NOT NULL DEFAULT 0,
+    totalamount NUMERIC(10,2) NOT NULL DEFAULT 0,
+    orderstatus VARCHAR(50) NOT NULL DEFAULT 'Pending',
+    paymentstatus VARCHAR(50) NOT NULL DEFAULT 'Unpaid',
+    confirmationnum VARCHAR(100) NOT NULL UNIQUE,
+    CONSTRAINT fk_orders_buyer
+        FOREIGN KEY (buyerid) REFERENCES buyer(buyerid)
+);
+
+
+CREATE TABLE cardinfo (
+    cardid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    buyerid INT NOT NULL,
+    cardnum VARCHAR(25) NOT NULL,
+    expirationdate VARCHAR(10) NOT NULL,
+    cvv VARCHAR(5) NOT NULL,
+    billingfirstname VARCHAR(100) NOT NULL,
+    billinglastname VARCHAR(100) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    state CHAR(2) NOT NULL,
+    zipcode VARCHAR(10) NOT NULL,
+    CONSTRAINT fk_cardinfo_buyer
+        FOREIGN KEY (buyerid) REFERENCES buyer(buyerid)
+);
+
+
+CREATE TABLE payment (
+    paymentid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    orderid INT NOT NULL,
+    paymentdate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    paymentamount NUMERIC(10,2) NOT NULL,
+    paymentmethod VARCHAR(50) NOT NULL,
+    paymentstatus VARCHAR(50) NOT NULL,
+    CONSTRAINT fk_payment_order
+        FOREIGN KEY (orderid) REFERENCES orders(orderid)
+);
+
+
+CREATE TABLE refund (
+    refundid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    paymentid INT NOT NULL,
+    refunddate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    refundamount NUMERIC(10,2) NOT NULL,
+    refundreason TEXT,
+    refundstatus VARCHAR(50) NOT NULL,
+    CONSTRAINT fk_refund_payment
+        FOREIGN KEY (paymentid) REFERENCES payment(paymentid)
+);
+
+
+CREATE TABLE redemptions (
+    redemptionid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    couponcode VARCHAR(50) NOT NULL,
+    orderid INT NOT NULL,
+    buyerid INT NOT NULL,
+    redemptiondate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    discountapplied NUMERIC(10,2) NOT NULL,
+    CONSTRAINT fk_redemptions_coupon
+        FOREIGN KEY (couponcode) REFERENCES coupons(couponcode),
+    CONSTRAINT fk_redemptions_order
+        FOREIGN KEY (orderid) REFERENCES orders(orderid),
+    CONSTRAINT fk_redemptions_buyer
+        FOREIGN KEY (buyerid) REFERENCES buyer(buyerid)
+);
+
+
+-- =========================
+-- TICKETS
+-- =========================
+
+CREATE TABLE ticket (
+    ticketid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    eventid INT NOT NULL,
+    sectionid INT NOT NULL,
+    rowid INT NOT NULL,
+    orderid INT,
+    seatnumber INT NOT NULL,
+    ticketprice NUMERIC(10,2) NOT NULL,
+    ticketstatus VARCHAR(50) NOT NULL DEFAULT 'Available',
+    CONSTRAINT fk_ticket_event
+        FOREIGN KEY (eventid) REFERENCES event(eventid),
+    CONSTRAINT fk_ticket_section
+        FOREIGN KEY (sectionid) REFERENCES sections(sectionid),
+    CONSTRAINT fk_ticket_row
+        FOREIGN KEY (rowid) REFERENCES "rows"(rowid),
+    CONSTRAINT fk_ticket_order
+        FOREIGN KEY (orderid) REFERENCES orders(orderid)
+);
+
+
+CREATE TABLE seathold (
+    holdid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    ticketid INT NOT NULL,
+    buyerid INT NOT NULL,
+    holdexpiresat TIMESTAMP NOT NULL,
+    holdstatus VARCHAR(50) NOT NULL DEFAULT 'Held',
+    CONSTRAINT fk_seathold_ticket
+        FOREIGN KEY (ticketid) REFERENCES ticket(ticketid),
+    CONSTRAINT fk_seathold_buyer
+        FOREIGN KEY (buyerid) REFERENCES buyer(buyerid)
+);
+
+
+CREATE TABLE scanner (
+    scanid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    ticketid INT NOT NULL,
+    employeeid INT NOT NULL,
+    scantime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    scanstatus VARCHAR(50) NOT NULL,
+    CONSTRAINT fk_scanner_ticket
+        FOREIGN KEY (ticketid) REFERENCES ticket(ticketid),
+    CONSTRAINT fk_scanner_employee
+        FOREIGN KEY (employeeid) REFERENCES employee(employeeid)
+);
+
+
+CREATE TABLE moshpitticket (
+    pitticketid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    pitid INT NOT NULL,
+    eventid INT NOT NULL,
+    orderid INT,
+    ticketprice NUMERIC(10,2) NOT NULL,
+    ticketstatus VARCHAR(50) NOT NULL DEFAULT 'Available',
+    purchasedate TIMESTAMP,
+    CONSTRAINT fk_moshpitticket_pit
+        FOREIGN KEY (pitid) REFERENCES moshpit(pitid),
+    CONSTRAINT fk_moshpitticket_event
+        FOREIGN KEY (eventid) REFERENCES event(eventid),
+    CONSTRAINT fk_moshpitticket_order
+        FOREIGN KEY (orderid) REFERENCES orders(orderid)
+);
+
+
+-- =========================
+-- REVIEWS
+-- =========================
+
+CREATE TABLE review (
+    reviewid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    buyerid INT NOT NULL,
+    eventid INT NOT NULL,
+    rating INT NOT NULL CHECK (rating BETWEEN 1 AND 5),
+    reviewtext TEXT,
+    reviewdate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_review_buyer
+        FOREIGN KEY (buyerid) REFERENCES buyer(buyerid),
+    CONSTRAINT fk_review_event
+        FOREIGN KEY (eventid) REFERENCES event(eventid)
+);
+
+
+-- =========================
+-- PARKING / BUS TABLES
+-- =========================
+
+CREATE TABLE parking_lot (
+    lotid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    lotname VARCHAR(100) NOT NULL,
+    maxcapacity INT NOT NULL CHECK (maxcapacity > 0),
+    numspotsavailable INT NOT NULL DEFAULT 0,
+    numspotstaken INT NOT NULL DEFAULT 0,
+    lotstatus VARCHAR(50) NOT NULL DEFAULT 'Open'
+);
+
+
+CREATE TABLE parking_spot (
+    spotid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    lotid INT NOT NULL,
+    spotnumber VARCHAR(50) NOT NULL,
+    spottype VARCHAR(50) NOT NULL,
+    available BOOLEAN NOT NULL DEFAULT TRUE,
+    reserved BOOLEAN NOT NULL DEFAULT FALSE,
+    handicap BOOLEAN NOT NULL DEFAULT FALSE,
+    CONSTRAINT fk_parking_spot_lot
+        FOREIGN KEY (lotid) REFERENCES parking_lot(lotid),
+    CONSTRAINT uq_lot_spotnumber UNIQUE (lotid, spotnumber),
+    CONSTRAINT chk_spottype
+        CHECK (spottype IN ('Regular', 'Handicap', 'Bus', 'VIP'))
+);
+
+
+CREATE TABLE parkingbyevent (
+    parkingeventid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    eventid INT NOT NULL,
+    parkingavailable BOOLEAN NOT NULL DEFAULT TRUE,
+    maxparkingpasses INT NOT NULL DEFAULT 0,
+    parkingprice NUMERIC(10,2) NOT NULL DEFAULT 0,
+    CONSTRAINT fk_parking_event
+        FOREIGN KEY (eventid) REFERENCES event(eventid)
+);
+
+
+CREATE TABLE parkingpass (
+    passid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    orderid INT NOT NULL,
+    eventid INT NOT NULL,
+    passcode VARCHAR(100) NOT NULL,
+    passprice NUMERIC(10,2) NOT NULL,
+    purchasedate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_parkingpass_order
+        FOREIGN KEY (orderid) REFERENCES orders(orderid),
+    CONSTRAINT fk_parkingpass_event
+        FOREIGN KEY (eventid) REFERENCES event(eventid)
+);
+
+
+CREATE TABLE venue_bus (
+    busid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    busnumber VARCHAR(50) NOT NULL UNIQUE,
+    licenseplate VARCHAR(50) NOT NULL UNIQUE,
+    capacity INT NOT NULL CHECK (capacity > 0),
+    busstatus VARCHAR(50) NOT NULL,
+    lotid INT NOT NULL,
+    assignedspotid INT,
+    CONSTRAINT fk_venue_bus_lot
+        FOREIGN KEY (lotid) REFERENCES parking_lot(lotid),
+    CONSTRAINT fk_venue_bus_spot
+        FOREIGN KEY (assignedspotid) REFERENCES parking_spot(spotid),
+    CONSTRAINT chk_busstatus
+        CHECK (busstatus IN ('Active', 'Inactive', 'Maintenance'))
+);
