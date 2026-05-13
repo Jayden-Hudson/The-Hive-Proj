@@ -1,0 +1,19 @@
+DROP TABLE IF EXISTS
+    coupons,
+    manager,
+    moshpit,
+    "Moshpit ticket",
+    moshpitticket,
+    parking_lot,
+    parking_spot,
+    payment,
+    performers,
+    preformers,
+    redemptions,
+    refund,
+    review,
+    scanner,
+    seathold,
+    ticket,
+    venue_bus
+CASCADE;
